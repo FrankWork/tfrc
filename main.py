@@ -9,6 +9,24 @@ import config
 
 config = config.FLAGS
 
+def _bi_rnn(inputs, seq_len):
+  def gru_cell():
+    return tf.contrib.rnn.GRUCell(config.hidden_size)
+  cell = gru_cell
+
+  if is_training and config.dropout_rate < 1:
+    def cell():
+      return tf.contrib.rnn.DropoutWrapper(
+            gru_cell(), output_keep_prob=config.dropout_rate)
+
+  cell_fw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
+  cell_bw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
+
+  # return value: output, state
+  # output shape:(output_fw, output_bw) [batch_size, max_time, hidden_size]
+  # state shape: (state_fw, state_bw) ([batch_size, hidden_size], ...) len() == num_layers
+  return tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, inputs, sequence_length=seq_len, dtype=tf.float32)
+
 def build_model(embeddings, is_training):
   bz = config.batch_size
   ez = config.embedding_size
@@ -27,27 +45,15 @@ def build_model(embeddings, is_training):
 
 
   # two bidirectional rnn, one for doc, one for question 
-  inputs = tf.unpack(x, n_steps, 1)
+  # inputs = tf.unpack(x, n_steps, 1)
+  output_d, state_d = _bi_rnn(doc)
+  output_q, state_q = _bi_rnn(ques)
   
-  def gru_cell():
-    return tf.contrib.rnn.GRUCell(config.hidden_size)
-  cell = gru_cell
 
-  if is_training and config.dropout_rate < 1:
-    def cell():
-      return tf.contrib.rnn.DropoutWrapper(
-            gru_cell(), output_keep_prob=config.dropout_rate)
-
-  # if is_training and config.keep_prob < 1: 
-
-  cell_fw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
-  cell_bw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
-  outputs, output_state_fw, output_state_bw = 
-      tf.contrib.rnn.static_bidirectional_rnn(cell_fw, cell_bw, inputs)
-  
 
   # bilinear attention
-
+  # alpha = softmax(output_q.transpose * W * output_d)
+  # o = tf.reduce_sum(alpha * output_d)
 
 
   # optimizer 
