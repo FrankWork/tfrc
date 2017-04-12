@@ -9,18 +9,23 @@ import config
 
 config = config.FLAGS
 
-def build_model():
+def build_model(embeddings, ):
   bz = config.batch_size
   ez = config.embedding_size
 
-  document = tf.placeholder(tf.int32, shape=[bz, ], name='document')
-  d_mask = tf.placeholder(tf.float32, shape=[], name='d_mask')
-  question = tf.placeholder(tf.int32, shape=[], name='question')
-  q_mask = tf.placeholder(tf.float32, shape=[], name='q_mask')
-  label = tf.placeholder(tf.float32, shape=[], name='label')
-  answer = tf.placeholder(tf.int32, shape=[], name='answer')
+  # with tf.namespace('input'):
+  doc = tf.placeholder(tf.int32, shape=[bz, None], name='document')
+  doc_mask = tf.placeholder(tf.float32, shape=[bz, None], name='doc_mask')
+  ques = tf.placeholder(tf.int32, shape=[bz, None], name='question')
+  ques_mask = tf.placeholder(tf.float32, shape=[bz, None], name='ques_mask')
+  label = tf.placeholder(tf.float32, shape=[bz], name='label')
+  ans = tf.placeholder(tf.int32, shape=[bz], name='answer')
 
+  # with tf.namespace('embedding_lookup'):
+  doc_emb = tf.nn.embedding_lookup(embeddings, doc)
+  ques_emb = tf.nn.embedding_lookup(embeddings, ques)
 
+  
 
 def main(_):
   dim = utils.get_dim(config.embedding_file)
@@ -53,8 +58,8 @@ def main(_):
   logging.info('-' * 50)
   logging.info('Build dictionary..')
   word_dict = utils.build_dict(train_examples[0] + train_examples[1])
-  entity_markers = list(set([w for w in word_dict.keys()
-                            if w.startswith('@entity')] + train_examples[2]))
+  entity_markers = list(set( [w for w in word_dict.keys()
+                            if w.startswith('@entity')] + train_examples[2] ))
   entity_markers = ['<unk_entity>'] + entity_markers
   entity_dict = {w: index for (index, w) in enumerate(entity_markers)}
   logging.info('Entity markers: %d' % len(entity_dict))

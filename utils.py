@@ -177,7 +177,7 @@ def gen_examples(x1, x2, l, y, batch_size):
     """
         Divide examples into batches of size `batch_size`.
     """
-    minibatches = utils.get_minibatches(len(x1), batch_size)
+    minibatches = get_minibatches(len(x1), batch_size)
     all_ex = []
     for minibatch in minibatches:
         mb_x1 = [x1[t] for t in minibatch]
