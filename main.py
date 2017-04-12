@@ -32,7 +32,7 @@ def build_model(embeddings, ):
   def cell():
     return tf.contrib.rnn.GRUCell(config.hidden_size)
 
-  # if is_training and config.keep_prob < 1:
+  # if is_training and config.keep_prob < 1: 
 
   cell_forward = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
   
