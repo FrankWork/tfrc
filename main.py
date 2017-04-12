@@ -25,6 +25,16 @@ def build_model(embeddings, ):
   doc_emb = tf.nn.embedding_lookup(embeddings, doc)
   ques_emb = tf.nn.embedding_lookup(embeddings, ques)
 
+
+
+
+
+  def cell():
+    return tf.contrib.rnn.GRUCell(config.hidden_size)
+
+  # if is_training and config.keep_prob < 1:
+
+  cell_forward = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
   
 
 def main(_):
