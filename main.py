@@ -11,6 +11,11 @@ import config
 config = config.FLAGS
 
 def _bi_rnn(inputs, seq_len, is_training=True):
+  '''
+  return value:
+    output:(output_fw, output_bw) [batch_size, max_time, hidden_size]
+    state: (state_fw, state_bw) ([batch_size, hidden_size], ...) len() == num_layers
+  '''
   def gru_cell():
     return tf.contrib.rnn.GRUCell(config.hidden_size)
   cell = gru_cell
@@ -23,9 +28,6 @@ def _bi_rnn(inputs, seq_len, is_training=True):
   cell_fw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
   cell_bw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
 
-  # return value: output, state
-  # output shape:(output_fw, output_bw) [batch_size, max_time, hidden_size]
-  # state shape: (state_fw, state_bw) ([batch_size, hidden_size], ...) len() == num_layers
   return tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, inputs, sequence_length=seq_len, dtype=tf.float32)
 
 def build_model(embeddings, is_training):
@@ -47,8 +49,8 @@ def build_model(embeddings, is_training):
 
   # two bidirectional rnn, one for doc, one for question 
   # inputs = tf.unpack(x, n_steps, 1)
-  output_d, state_d = _bi_rnn(doc)
-  output_q, state_q = _bi_rnn(ques)
+  output_d, state_d = _bi_rnn(doc, seq_len, is_training)
+  output_q, state_q = _bi_rnn(ques, seq_len, is_training)
   
 
 
@@ -59,6 +61,27 @@ def build_model(embeddings, is_training):
 
   # optimizer 
   
+
+def train(train_examples, word_dict, entity_dict)
+  # Training
+  logging.info('-' * 50)
+  logging.info('Start training..')
+  train_d, train_q, train_l, train_a = utils.vectorize(train_examples, word_dict, entity_dict)
+  assert len(train_d) == config.num_train
+  all_train = utils.gen_examples(train_d, train_q, train_l, train_a, config.batch_size)  
+  start_time = time.time()
+  n_updates = 0
+
+  for epoch in range(config.num_epoches):
+    np.random.shuffle(all_train)
+    for idx, minibatch in enumerate(all_train):
+      # (doc, doc_mask, ques, ques_mask, labled, ans) = minibatch
+      for item in minibatch:
+        print('*' * 40)
+        print(item)
+      exit()
+
+      # TODO: training
 
   
 
@@ -138,25 +161,7 @@ def main(_):
   if config.test_only:
       return
   
-  # Training
-  logging.info('-' * 50)
-  logging.info('Start training..')
-  train_d, train_q, train_l, train_a = utils.vectorize(train_examples, word_dict, entity_dict)
-  assert len(train_d) == config.num_train
-  all_train = utils.gen_examples(train_d, train_q, train_l, train_a, config.batch_size)  
-  start_time = time.time()
-  n_updates = 0
-
-  for epoch in range(config.num_epoches):
-    np.random.shuffle(all_train)
-    for idx, minibatch in enumerate(all_train):
-      # (doc, doc_mask, ques, ques_mask, labled, ans) = minibatch
-      for item in minibatch:
-        print('*' * 40)
-        print(item)
-      exit()
-
-      # TODO: training
-
+  train(train_examples, word_dict, entity_dict)
+  
 if __name__ == '__main__':
   tf.app.run()
