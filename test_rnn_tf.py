@@ -7,17 +7,38 @@ batch_size = 2
 max_time = 3
 embedding_size = 1
 
-inputs = tf.ones([batch_size, max_time, embedding_size])
+
+def _bi_rnn(inputs, seq_len, is_training=True):
+  '''
+  return value:
+    output:(output_fw, output_bw) [batch_size, max_time, hidden_size]
+    state: (state_fw, state_bw) ([batch_size, hidden_size], ...) len() == num_layers
+  '''
+  def gru_cell():
+    return tf.contrib.rnn.GRUCell(hidden_size)
+  cell = gru_cell
+
+  if is_training and dropout_rate < 1:
+    def cell():
+      return tf.contrib.rnn.DropoutWrapper(
+            gru_cell(), output_keep_prob=dropout_rate)
+
+  cell_fw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(num_layers)] )
+  cell_bw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(num_layers)] )
+
+  return tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, inputs, sequence_length=seq_len, dtype=tf.float32)
+
+
+# [batch_size, max_time, embedding_size]
+inputs = tf.convert_to_tensor([
+
+])
+
+tf.ones([batch_size, max_time, embedding_size])
+
 seq_len = tf.ones(batch_size, dtype=tf.int32) * max_time
-def gru_cell():
-    cell = tf.contrib.rnn.GRUCell(hidden_size)
-    cell = tf.contrib.rnn.DropoutWrapper(cell, output_keep_prob=dropout_rate)
-    return cell
 
-cell_fw = tf.contrib.rnn.MultiRNNCell([gru_cell() for _ in range(num_layers)] )
-cell_bw = tf.contrib.rnn.MultiRNNCell([gru_cell() for _ in range(num_layers)] )
-
-o, s = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, inputs, sequence_length=seq_len, dtype=tf.float32)
+o, s = _bi_rnn(inputs, seq_len)
 
 with tf.Session() as session:
     session.run(tf.global_variables_initializer())
@@ -25,10 +46,10 @@ with tf.Session() as session:
     print(o[0])
     print('*' * 40)
     print(o[1])
-    print('*' * 40)    
+    print('*' * 40)
     print(s[0])
     print('*' * 40)
-    print(s[1])    
+    print(s[1])
 # [[[-0.        ]
 #   [-0.        ]
 #   [-0.        ]]

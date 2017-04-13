@@ -184,7 +184,7 @@ def gen_examples(x1, x2, l, y, batch_size):
         mb_x2 = [x2[t] for t in minibatch]
         mb_l = l[minibatch]
         mb_y = [y[t] for t in minibatch]
-        mb_x1, mb_mask1 = utils.prepare_data(mb_x1)
-        mb_x2, mb_mask2 = utils.prepare_data(mb_x2)
+        mb_x1, mb_mask1 = prepare_data(mb_x1)
+        mb_x2, mb_mask2 = prepare_data(mb_x2)
         all_ex.append((mb_x1, mb_mask1, mb_x2, mb_mask2, mb_l, mb_y))
     return all_ex

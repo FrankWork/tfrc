@@ -3,13 +3,14 @@ import tensorflow as tf
 import sys
 import time
 import logging
+import os
 
 import utils
 import config
 
 config = config.FLAGS
 
-def _bi_rnn(inputs, seq_len):
+def _bi_rnn(inputs, seq_len, is_training=True):
   def gru_cell():
     return tf.contrib.rnn.GRUCell(config.hidden_size)
   cell = gru_cell
@@ -62,6 +63,14 @@ def build_model(embeddings, is_training):
   
 
 def main(_):
+  path = config.data_path
+  config.embedding_file = os.path.join(path, config.embedding_file)
+  config.train_file = os.path.join(path, config.train_file)
+  config.dev_file = os.path.join(path, config.dev_file)
+  config.test_file = os.path.join(path, config.test_file)
+
+  # print(config.embedding_file)
+  # exit()
   dim = utils.get_dim(config.embedding_file)
   config.embedding_size = dim
 
@@ -121,10 +130,10 @@ def main(_):
   # l: whether the entity label occurs in the document
   dev_d, dev_q, dev_l, dev_a = utils.vectorize(dev_examples, word_dict, entity_dict)
   assert len(dev_d) == config.num_dev
-  all_dev = gen_examples(dev_d, dev_q, dev_l, dev_a, config.batch_size)
-  dev_acc = eval_acc()# TODO
-  logging.info('Dev accuracy: %.2f %%' % dev_acc)
-  best_acc = dev_acc
+  all_dev = utils.gen_examples(dev_d, dev_q, dev_l, dev_a, config.batch_size)
+  # dev_acc = eval_acc()# TODO
+  # logging.info('Dev accuracy: %.2f %%' % dev_acc)
+  # best_acc = dev_acc
 
   if config.test_only:
       return
@@ -133,17 +142,21 @@ def main(_):
   logging.info('-' * 50)
   logging.info('Start training..')
   train_d, train_q, train_l, train_a = utils.vectorize(train_examples, word_dict, entity_dict)
-  assert len(train_d) == args.num_train
-  all_train = gen_examples(train_d, train_q, train_l, train_a, config.batch_size)  
+  assert len(train_d) == config.num_train
+  all_train = utils.gen_examples(train_d, train_q, train_l, train_a, config.batch_size)  
   start_time = time.time()
   n_updates = 0
 
   for epoch in range(config.num_epoches):
     np.random.shuffle(all_train)
     for idx, minibatch in enumerate(all_train):
-      (doc, doc_mask, ques, ques_mask, labled, ans) = minibatch
+      # (doc, doc_mask, ques, ques_mask, labled, ans) = minibatch
+      for item in minibatch:
+        print('*' * 40)
+        print(item)
+      exit()
+
       # TODO: training
 
 if __name__ == '__main__':
   tf.app.run()
-jn
