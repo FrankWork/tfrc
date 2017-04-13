@@ -8,7 +8,7 @@ tf.app.flags.DEFINE_boolean("test_only", False,
                             "no need to run training process.")
 
 # Data files
-tf.app.flags.DEFINE_string("data_path", "../rc-cnn-dailymail/data/", "Data directory")
+tf.app.flags.DEFINE_string("data_path", "data/", "Data directory")
 tf.app.flags.DEFINE_string("embedding_file", "glove/glove.6B.100d.txt", 
                            "embedding file")
 tf.app.flags.DEFINE_string("train_file", "cnn/train.txt", "training file")

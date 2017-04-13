@@ -10,7 +10,7 @@ import config
 
 config = config.FLAGS
 
-def _bi_rnn(inputs, seq_len, is_training=True):
+def _bi_rnn(inputs, seq_len, is_training=True, scope=None):
   '''
   return value:
     output:(output_fw, output_bw) [batch_size, max_time, hidden_size]
@@ -28,41 +28,48 @@ def _bi_rnn(inputs, seq_len, is_training=True):
   cell_fw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
   cell_bw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
 
-  return tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, inputs, sequence_length=seq_len, dtype=tf.float32)
+  return tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, inputs, 
+                          sequence_length=seq_len, dtype=tf.float32, scope=scope)
 
-def build_model(embeddings, is_training):
-  bz = config.batch_size
-  ez = config.embedding_size
+class Model(object):
+  def __init__(self, embeddings, is_training):
+    bz = config.batch_size
+    ez = config.embedding_size
 
-  # with tf.namespace('input'):
-  doc = tf.placeholder(tf.int32, shape=[bz, None], name='document')
-  doc_mask = tf.placeholder(tf.float32, shape=[bz, None], name='doc_mask')
-  ques = tf.placeholder(tf.int32, shape=[bz, None], name='question')
-  ques_mask = tf.placeholder(tf.float32, shape=[bz, None], name='ques_mask')
-  label = tf.placeholder(tf.float32, shape=[bz], name='label')
-  ans = tf.placeholder(tf.int32, shape=[bz], name='answer')
+    # with tf.namespace('input'):
+    doc = tf.placeholder(tf.int32, shape=[bz, None], name='document')
+    doc_len = tf.placeholder(tf.int32, shape=[bz], name='doc_len')
+    ques = tf.placeholder(tf.int32, shape=[bz, None], name='question')
+    ques_len = tf.placeholder(tf.int32, shape=[bz], name='ques_len')
+    label = tf.placeholder(tf.float32, shape=[bz, config.num_labels], name='label')
+    ans = tf.placeholder(tf.int32, shape=[bz], name='answer')
+    (self.doc, self.doc_len, self.ques, self.ques_len, self.label, self.ans) = \
+                                  (doc, doc_len, ques, ques_len, label, ans)
+    # with tf.namespace('embedding_lookup'):
+    embeddings = tf.Variable(embeddings, dtype=tf.float32, trainable=False,name='embeddings')
+    # embeddings = tf.get_variable(initializer=embeddings, dtype=tf.float32, name='embeddings')
+    doc_emb = tf.nn.embedding_lookup(embeddings, doc)
+    ques_emb = tf.nn.embedding_lookup(embeddings, ques)
 
-  # with tf.namespace('embedding_lookup'):
-  doc_emb = tf.nn.embedding_lookup(embeddings, doc)
-  ques_emb = tf.nn.embedding_lookup(embeddings, ques)
+
+    # two bidirectional rnn, one for doc, one for question 
+    # inputs = tf.unpack(x, n_steps, 1)
+    output_d, state_d = _bi_rnn(doc_emb, doc_len, is_training, 'doc_rnn')
+    output_q, state_q = _bi_rnn(ques_emb, ques_len, is_training, 'ques_rnn')
+    
+
+    self.output_d = output_d
+    self.output_q = output_q
+    # bilinear attention
+    # alpha = softmax(output_q.transpose * W * output_d)
+    # o = tf.reduce_sum(alpha * output_d)
 
 
-  # two bidirectional rnn, one for doc, one for question 
-  # inputs = tf.unpack(x, n_steps, 1)
-  output_d, state_d = _bi_rnn(doc, seq_len, is_training)
-  output_q, state_q = _bi_rnn(ques, seq_len, is_training)
+    # optimizer 
+  
   
 
-
-  # bilinear attention
-  # alpha = softmax(output_q.transpose * W * output_d)
-  # o = tf.reduce_sum(alpha * output_d)
-
-
-  # optimizer 
-  
-
-def train(train_examples, word_dict, entity_dict)
+def train(embeddings,train_examples, word_dict, entity_dict):
   # Training
   logging.info('-' * 50)
   logging.info('Start training..')
@@ -72,16 +79,36 @@ def train(train_examples, word_dict, entity_dict)
   start_time = time.time()
   n_updates = 0
 
-  for epoch in range(config.num_epoches):
-    np.random.shuffle(all_train)
-    for idx, minibatch in enumerate(all_train):
-      # (doc, doc_mask, ques, ques_mask, labled, ans) = minibatch
-      for item in minibatch:
-        print('*' * 40)
-        print(item)
-      exit()
+  model = Model(embeddings, True)
 
-      # TODO: training
+  with tf.Session() as session:
+    session.run(tf.global_variables_initializer())
+    for epoch in range(config.num_epoches):
+      # np.random.shuffle(all_train)
+      for idx, minibatch in enumerate(all_train):
+        (doc, doc_len, ques, ques_len, labled, ans) = minibatch
+        # (doc, doc_len, ques, ques_len, label, ans) = model.inputs
+        # for item in minibatch:
+        #   print(type(item))
+        # exit()
+        feed_dict = {model.doc:doc, model.doc_len:doc_len, model.ques:ques, \
+                  model.ques_len: ques_len, model.label: labled, model.ans: ans}
+        o1, o2 = session.run([model.output_d, model.output_q], feed_dict=feed_dict)
+        print('*' * 40)
+        print(o1)
+        print('*' * 40)
+        print(o2)
+        # print('*' * 40)
+        # print(ques)
+        # print('*' * 40)
+        # print(labled[0])
+        # assert len(labled[0]) == config.num_labels
+        # print('*' * 40)
+        # print(ans)
+      
+        exit()
+
+        # TODO: training
 
   
 
@@ -109,7 +136,7 @@ def main(_):
   logging.info('Load data files..')
   if config.debug:
     logging.info('*' * 10 + ' Train')
-    train_examples = utils.load_data(config.train_file, 1000)
+    train_examples = utils.load_data(config.train_file, 100)
     logging.info('*' * 10 + ' Dev')
     dev_examples = utils.load_data(config.dev_file, 100)
   else:
@@ -161,7 +188,7 @@ def main(_):
   if config.test_only:
       return
   
-  train(train_examples, word_dict, entity_dict)
+  train(embeddings, train_examples, word_dict, entity_dict)
   
 if __name__ == '__main__':
   tf.app.run()
