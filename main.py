@@ -35,6 +35,8 @@ class Model(object):
   def __init__(self, embeddings, is_training):
     bz = config.batch_size
     ez = config.embedding_size
+    hz = config.hidden_size * 2
+    nl = config.num_labels
 
     # with tf.namespace('input'):
     doc = tf.placeholder(tf.int32, shape=[bz, None], name='document')
@@ -42,7 +44,7 @@ class Model(object):
     ques = tf.placeholder(tf.int32, shape=[bz, None], name='question')
     ques_len = tf.placeholder(tf.int32, shape=[bz], name='ques_len')
     label = tf.placeholder(tf.float32, shape=[bz, config.num_labels], name='label')
-    ans = tf.placeholder(tf.int32, shape=[bz], name='answer')
+    ans = tf.placeholder(tf.int64, shape=[bz], name='answer')
     (self.doc, self.doc_len, self.ques, self.ques_len, self.label, self.ans) = \
                                   (doc, doc_len, ques, ques_len, label, ans)
     # with tf.namespace('embedding_lookup'):
@@ -53,27 +55,41 @@ class Model(object):
 
 
     # two bidirectional rnn, one for doc, one for question 
-    # inputs = tf.unpack(x, n_steps, 1)
     output_d, state_d = _bi_rnn(doc_emb, doc_len, is_training, 'doc_rnn')
     output_q, state_q = _bi_rnn(ques_emb, ques_len, is_training, 'ques_rnn')
     
 
-    self.d = tf.concat([output_d[0], output_d[1]], axis=2) # di = (fw_hi, bw_hi)
-    print(self.d.get_shape())#(32, 548, 256) (bz, len, hz*2)
+    d = tf.concat([output_d[0], output_d[1]], axis=2) # di = (fw_hi, bw_hi)
+    print(d.get_shape())#(32, 548, 256) (bz, len, hz)
     
     idx = tf.stack([tf.range(bz), ques_len-1], axis=1)
-    self.q = tf.concat([tf.gather_nd(output_q[0], idx), output_q[1][:,0,:]], axis=1) # q = (fw_ht, bw_h1)
-    print(self.q.get_shape()) # (32, 256) (bz, hz*2)
+    q = tf.concat([tf.gather_nd(output_q[0], idx), output_q[1][:,0,:]], axis=1) # q = (fw_ht, bw_h1)
+    print(q.get_shape()) # (32, 256) (bz, hz)
     
-    # self.q = output_q[0][] +  
     # bilinear attention
-    # alpha = softmax(output_q.transpose * W * output_d)
-    # o = tf.reduce_sum(alpha * output_d)
-
+    hz2 = config.hidden_size*2
+    ws = tf.truncated_normal([hz, hz], name='ws')
+    alpha = tf.matmul(q, ws) # (bz, hz)
+    alpha = tf.matmul(d, tf.reshape(alpha,[bz, hz, 1]))
+    alpha = tf.reshape(alpha, [bz, -1]) # (bz, len)
+    alpha = tf.nn.softmax(alpha) # (bz, len)
+    attention = tf.multiply(tf.reshape(alpha, [bz, -1, 1]), d) # (bz, len, hz)
+    attention = tf.reduce_sum(attention, 1)# (bz, hz)
+    
+    # prediction 
+    w = tf.truncated_normal([hz, nl], name='w') # [hz, nl]
+    
+    prob = tf.nn.softmax(tf.matmul(attention, w)) #[bz, nl]
+    prob = prob * label # [bz, nl] [nl]
+    pred = tf.arg_max(prob, -1) # [bz]
+    acc = tf.reduce_sum(tf.cast(tf.equal(pred, ans), dtype=tf.int64))
+    self.pred = pred
+    self.acc = acc
 
     # optimizer 
-  
-  
+    loss = tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=ans)
+    optimizer = tf.train.GradientDescentOptimizer(lr)
+    optimizer.minimize(loss)
 
 def train(embeddings,train_examples, word_dict, entity_dict):
   # Training
@@ -99,10 +115,10 @@ def train(embeddings,train_examples, word_dict, entity_dict):
         # exit()
         feed_dict = {model.doc:doc, model.doc_len:doc_len, model.ques:ques, \
                   model.ques_len: ques_len, model.label: labled, model.ans: ans}
-        d, q = session.run([model.d, model.q], feed_dict=feed_dict)
-        print(d.shape)# (32, 548, 128)
-        print('*' * 40)
-        print(q.shape)
+        pred, acc = session.run([model.pred, model.acc], feed_dict=feed_dict)
+        print(pred.shape)
+        print(acc)
+        
         # print('*' * 40)
         # print(o1[1])
         # print('*' * 40)
