@@ -58,8 +58,14 @@ class Model(object):
     output_q, state_q = _bi_rnn(ques_emb, ques_len, is_training, 'ques_rnn')
     
 
-    self.output_d = output_d
-    self.output_q = output_q
+    self.d = tf.concat([output_d[0], output_d[1]], axis=2) # di = (fw_hi, bw_hi)
+    print(self.d.get_shape())#(32, 548, 256) (bz, len, hz*2)
+    
+    idx = tf.stack([tf.range(bz), ques_len-1], axis=1)
+    self.q = tf.concat([tf.gather_nd(output_q[0], idx), output_q[1][:,0,:]], axis=1) # q = (fw_ht, bw_h1)
+    print(self.q.get_shape()) # (32, 256) (bz, hz*2)
+    
+    # self.q = output_q[0][] +  
     # bilinear attention
     # alpha = softmax(output_q.transpose * W * output_d)
     # o = tf.reduce_sum(alpha * output_d)
@@ -93,11 +99,14 @@ def train(embeddings,train_examples, word_dict, entity_dict):
         # exit()
         feed_dict = {model.doc:doc, model.doc_len:doc_len, model.ques:ques, \
                   model.ques_len: ques_len, model.label: labled, model.ans: ans}
-        o1, o2 = session.run([model.output_d, model.output_q], feed_dict=feed_dict)
+        d, q = session.run([model.d, model.q], feed_dict=feed_dict)
+        print(d.shape)# (32, 548, 128)
         print('*' * 40)
-        print(o1)
-        print('*' * 40)
-        print(o2)
+        print(q.shape)
+        # print('*' * 40)
+        # print(o1[1])
+        # print('*' * 40)
+        # print(o2)
         # print('*' * 40)
         # print(ques)
         # print('*' * 40)
