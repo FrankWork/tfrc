@@ -32,7 +32,7 @@ def _bi_rnn(inputs, seq_len, is_training=True, scope=None):
                           sequence_length=seq_len, dtype=tf.float32, scope=scope)
 
 class Model(object):
-  def __init__(self, embeddings, is_training):
+  def __init__(self, embeddings, is_training=True):
     bz = config.batch_size
     ez = config.embedding_size
     hz = config.hidden_size * 2
@@ -86,69 +86,48 @@ class Model(object):
     self.pred = pred
     self.acc = acc
 
+    if not is_training:
+      return
+
     # optimizer 
     loss = tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=ans)
     optimizer = tf.train.GradientDescentOptimizer(lr)
-    optimizer.minimize(loss)
+    tvars = tf.trainable_variables()
+    grads, _ = tf.clip_by_global_norm(tf.gradients(cost, tvars),
+                                      config.max_grad_norm)
+    self.train_op = optimizer.apply_gradients(
+        zip(grads, tvars),
+        global_step=tf.contrib.framework.get_or_create_global_step())
+    self.loss = loss
 
-def train(embeddings,train_examples, word_dict, entity_dict):
-  # Training
-  logging.info('-' * 50)
-  logging.info('Start training..')
-  train_d, train_q, train_l, train_a = utils.vectorize(train_examples, word_dict, entity_dict)
-  assert len(train_d) == config.num_train
-  all_train = utils.gen_examples(train_d, train_q, train_l, train_a, config.batch_size)  
+def run_epoch(session, model, all_data):
   start_time = time.time()
-  n_updates = 0
 
-  model = Model(embeddings, True)
-
-  with tf.Session() as session:
-    session.run(tf.global_variables_initializer())
-    for epoch in range(config.num_epoches):
-      # np.random.shuffle(all_train)
-      for idx, minibatch in enumerate(all_train):
-        (doc, doc_len, ques, ques_len, labled, ans) = minibatch
-        # (doc, doc_len, ques, ques_len, label, ans) = model.inputs
-        # for item in minibatch:
-        #   print(type(item))
-        # exit()
-        feed_dict = {model.doc:doc, model.doc_len:doc_len, model.ques:ques, \
-                  model.ques_len: ques_len, model.label: labled, model.ans: ans}
-        pred, acc = session.run([model.pred, model.acc], feed_dict=feed_dict)
-        print(pred.shape)
-        print(acc)
-        
-        # print('*' * 40)
-        # print(o1[1])
-        # print('*' * 40)
-        # print(o2)
-        # print('*' * 40)
-        # print(ques)
-        # print('*' * 40)
-        # print(labled[0])
-        # assert len(labled[0]) == config.num_labels
-        # print('*' * 40)
-        # print(ans)
-      
-        exit()
-
-        # TODO: training
+  for step, minibatch in enumerate(all_data):
+    (doc, doc_len, ques, ques_len, labled, ans) = minibatch
+    feed_dict = {
+      model.doc:doc, model.doc_len:doc_len, model.ques:ques,
+      model.ques_len: ques_len, model.label: labled, model.ans: ans
+    }
+    pred, acc = session.run([model.pred, model.acc], feed_dict=feed_dict)
+    print(pred.shape)
+    print(acc)
+    
 
   
+  n_updates = 0
 
-def main(_):
+def init():
   path = config.data_path
   config.embedding_file = os.path.join(path, config.embedding_file)
   config.train_file = os.path.join(path, config.train_file)
   config.dev_file = os.path.join(path, config.dev_file)
   config.test_file = os.path.join(path, config.test_file)
-
-  # print(config.embedding_file)
-  # exit()
+  
   dim = utils.get_dim(config.embedding_file)
   config.embedding_size = dim
 
+  # Config log
   if config.log_file is None:
     logging.basicConfig(level=logging.DEBUG,
                       format='%(asctime)s %(message)s', datefmt='%m-%d %H:%M')
@@ -156,7 +135,7 @@ def main(_):
     logging.basicConfig(filename=config.log_file,
                       filemode='w', level=logging.DEBUG,
                       format='%(asctime)s %(message)s', datefmt='%m-%d %H:%M')
-  
+  # Load data
   logging.info('-' * 50)
   logging.info('Load data files..')
   if config.debug:
@@ -173,6 +152,7 @@ def main(_):
   config.num_train = len(train_examples[0])
   config.num_dev = len(dev_examples[0])
 
+  # Build dictionary
   logging.info('-' * 50)
   logging.info('Build dictionary..')
   word_dict = utils.build_dict(train_examples[0] + train_examples[1])
@@ -188,32 +168,70 @@ def main(_):
   embeddings = utils.gen_embeddings(word_dict, config.embedding_size, config.embedding_file)
   (config.vocab_size, config.embedding_size) = embeddings.shape
 
-  # log parameters
+  # Log parameters
   flags = config.__dict__['__flags']
   flag_str = "\n"
   for k in flags:
     flag_str += "\t%s:\t%s\n" % (k, flags[k])
   logging.info(flag_str)
 
-  # logging.info('Compile functions..')
-  # train_fn, test_fn, params = build_fn(config, embeddings)
-  # logging.info('Done.')
-
+  # Vectorize test data
   logging.info('-' * 50)
-  logging.info('Intial test..')
+  logging.info('Vectorize test data..')
   # d: document, q: question, a:answer
   # l: whether the entity label occurs in the document
   dev_d, dev_q, dev_l, dev_a = utils.vectorize(dev_examples, word_dict, entity_dict)
   assert len(dev_d) == config.num_dev
   all_dev = utils.gen_examples(dev_d, dev_q, dev_l, dev_a, config.batch_size)
-  # dev_acc = eval_acc()# TODO
-  # logging.info('Dev accuracy: %.2f %%' % dev_acc)
-  # best_acc = dev_acc
 
   if config.test_only:
-      return
-  
-  train(embeddings, train_examples, word_dict, entity_dict)
+      return embeddings, all_dev, None
+
+  # Vectorize training data
+  logging.info('-' * 50)
+  logging.info('Vectorize training data..')
+  train_d, train_q, train_l, train_a = utils.vectorize(train_examples, word_dict, entity_dict)
+  assert len(train_d) == config.num_train
+  all_train = utils.gen_examples(train_d, train_q, train_l, train_a, config.batch_size)
+
+  return embeddings, all_dev, all_train
+
+
+def main(_):
+  embeddings, all_dev, all_train = init()
+
+  with tf.Graph().as_default():
+    with tf.name_scope("Train"):
+      with tf.variable_scope("Model", reuse=None):
+        m_train = Model(embeddings, is_training=True)
+      tf.summary.scalar("Training Loss", m_train.loss)
+
+    with tf.name_scope("Valid"):
+      with tf.variable_scope("Model", reuse=True):
+        m_valid = Model(embeddings, is_training=False)
+      tf.summary.scalar("Valid Loss", m_valid.loss)
+    
+    sv = tf.train.Supervisor(logdir=config.save_path)
+    with sv.managed_session() as session:
+
+      if config.test_only:
+        valid_acc = run_epoch(session, m_valid, all_dev)
+        print("Valid acc: %.3f" % valid_acc)
+        break
+
+      for epoch in range(config.num_epoches):
+        # lr_decay = config.lr_decay ** max(i + 1 - config.max_epoch, 0.0)
+        # m.assign_lr(session, config.learning_rate * lr_decay)
+        # np.random.shuffle(all_train)
+
+        train_acc = run_epoch(session, m_train, all_train)
+        print("Epoch: %d Train acc: %.3f" % (i + 1, train_acc))        
+        valid_acc = run_epoch(session, m_valid, all_dev)
+        print("Epoch: %d Valid acc: %.3f" % (i + 1, valid_acc))
+      # test_acc = run_epoch(session, m_test)
+      if config.save_path:
+        sv.saver.save(session, config.save_path, global_step=sv.global_step)
+
   
 if __name__ == '__main__':
   tf.app.run()
