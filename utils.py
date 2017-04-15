@@ -136,6 +136,8 @@ def prepare_data(seqs):
 
 def get_minibatches(n, minibatch_size, shuffle=False):
     idx_list = np.arange(0, n, minibatch_size)
+    if n - idx_list[-1] < minibatch_size:
+        idx_list = idx_list[:-1] # remove last one
     if shuffle:
         np.random.shuffle(idx_list)
     minibatches = []

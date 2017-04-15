@@ -24,7 +24,7 @@ tf.app.flags.DEFINE_integer("num_layers", "1", "Number of RNN layers")
 
 # Optimization details
 tf.app.flags.DEFINE_integer("batch_size", "32", "Batch size")
-tf.app.flags.DEFINE_integer("num_epoches", "30", "Number of epoches")
+tf.app.flags.DEFINE_integer("num_epoches", "10", "Number of epoches")
 tf.app.flags.DEFINE_integer("eval_iter", "100", 
                             "Evaluation on dev set after K updates")
 tf.app.flags.DEFINE_float("dropout_rate", 0.2, "Dropout rate.")
