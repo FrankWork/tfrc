@@ -2,7 +2,7 @@ import tensorflow as tf
 
 
 # Basics
-tf.app.flags.DEFINE_boolean("debug", True,
+tf.app.flags.DEFINE_boolean("debug", False,
                             "run in the debug mode.")
 tf.app.flags.DEFINE_boolean("test_only", False,
                             "no need to run training process.")
@@ -14,7 +14,7 @@ tf.app.flags.DEFINE_string("embedding_file", "glove/glove.6B.100d.txt",
 tf.app.flags.DEFINE_string("train_file", "cnn/train.txt", "training file")
 tf.app.flags.DEFINE_string("dev_file", "cnn/dev.txt", "Development file")
 tf.app.flags.DEFINE_string("test_file", "cnn/test.txt", "Test file")
-tf.app.flags.DEFINE_string("log_file", None, "Log file")
+tf.app.flags.DEFINE_string("log_file", "log.txt", "Log file")
 tf.app.flags.DEFINE_string("save_path", "model/", "save model here")
 
 

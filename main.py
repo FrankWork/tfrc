@@ -95,7 +95,9 @@ class Model(object):
     optimizer = tf.train.GradientDescentOptimizer(config.learning_rate)
     gvs = optimizer.compute_gradients(loss)
     capped_gvs = [(tf.clip_by_value(grad, -config.grad_clipping, config.grad_clipping), var) for grad, var in gvs]
-    train_op = optimizer.apply_gradients(capped_gvs, global_step=tf.contrib.framework.get_or_create_global_step())
+    # tf.logging.set_verbosity(tf.logging.WARN)
+    global_step = tf.contrib.framework.get_or_create_global_step()
+    train_op = optimizer.apply_gradients(capped_gvs, global_step=global_step)
     self.train_op = train_op
     self.loss = loss
 
@@ -105,7 +107,7 @@ def run_epoch(session, model, all_data, is_training=True, verbose=True):
   acc_count = 0
   total_steps = len(all_data)
 
-  
+  np.random.shuffle(all_data)
   for step, minibatch in enumerate(all_data):
     (doc, doc_len, ques, ques_len, labled, ans) = minibatch
 
@@ -117,16 +119,15 @@ def run_epoch(session, model, all_data, is_training=True, verbose=True):
     if is_training:
       acc, loss = session.run([model.acc, model.loss], feed_dict=feed_dict)
       acc_count += acc
-      # loss_count += loss
-      if verbose and total_steps % 5 == 0:
-        logging.info("progress: %.0f%% acc: %.2f loss: %.2f step_time: %.2f" %(
+      if verbose and step % 500 == 0:
+        logging.info("progress: %.0f%% acc: %.2f%% loss: %.2f step_time: %.2f" %(
           step / total_steps * 100,
-          acc_count / ((step+1) * config.batch_size),
+          acc_count / ((step+1) * config.batch_size) * 100,
           loss,
           (time.time() - start_time) / (step + 1)
           ))
     else:
-      acc = session.run([model.acc], feed_dict=feed_dict)
+      acc, = session.run([model.acc], feed_dict=feed_dict)
       acc_count += acc
 
   return acc_count / (total_steps * config.batch_size)
@@ -156,7 +157,7 @@ def init():
   logging.info('Load data files..')
   if config.debug:
     logging.info('*' * 10 + ' Train')
-    train_examples = utils.load_data(config.train_file, 100)
+    train_examples = utils.load_data(config.train_file, 1000)
     logging.info('*' * 10 + ' Dev')
     dev_examples = utils.load_data(config.dev_file, 100)
   else:
@@ -242,9 +243,9 @@ def main(_):
         # np.random.shuffle(all_train)
 
         train_acc = run_epoch(session, m_train, all_train)
-        logging.info("Epoch: %d Train acc: %.3f" % (epoch + 1, train_acc))
+        logging.info("Epoch: %d Train acc: %.2f%%" % (epoch + 1, train_acc*100))
         valid_acc = run_epoch(session, m_valid, all_dev, is_training=False)
-        logging.info("Epoch: %d Valid acc: %.3f" % (epoch + 1, valid_acc))
+        logging.info("Epoch: %d Valid acc: %.2f%%" % (epoch + 1, valid_acc*100))
       # test_acc = run_epoch(session, m_test)
       if config.save_path:
         sv.saver.save(session, config.save_path, global_step=sv.global_step)
