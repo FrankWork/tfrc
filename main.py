@@ -66,7 +66,6 @@ class Model(object):
     # print(q.get_shape()) # (32, 256) (bz, hz)
     
     # bilinear attention
-    hz2 = config.hidden_size*2
     ws = tf.Variable(tf.truncated_normal([hz, hz]), name='ws')
     alpha = tf.matmul(q, ws) # (bz, hz)
     alpha = tf.matmul(d, tf.reshape(alpha,[bz, hz, 1]))
