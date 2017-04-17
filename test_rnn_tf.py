@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 
 
-dropout_rate = 1
+dropout_rate = 1 # keep_rate
 hidden_size = 3
 num_layers = 1
 

@@ -23,12 +23,17 @@ def stack_rnn(l_emb, l_mask, num_layers, num_units,
             if dropout_rate > 0:
                 network = lasagne.layers.DropoutLayer(network, p=dropout_rate)
             c_only_return_final = only_return_final and (layer == num_layers - 1)
-            network = rnn_layer(network, num_units,
+            try:
+                network = rnn_layer(network, num_units,
                                 grad_clipping=grad_clipping,
                                 mask_input=l_mask,
                                 only_return_final=c_only_return_final,
                                 backwards=backwards,
                                 name=name + '_layer' + str(layer + 1))
+            except Exception as e:
+                print(e)
+                print('exit..')
+                exit()
         return network
 
     network = _rnn(True, name)
@@ -39,15 +44,18 @@ def stack_rnn(l_emb, l_mask, num_layers, num_units,
 in_x1 = T.matrix('x1')
 in_mask1 = T.matrix('mask1')
 
+embeddings = np.ones([2, 1], dtype=np.float32)
 
 l_in1 = lasagne.layers.InputLayer((None, None), in_x1)
 l_mask1 = lasagne.layers.InputLayer((None, None), in_mask1)
+l_emb1 = lasagne.layers.EmbeddingLayer(l_in1, 2,
+                                           1, W=embeddings)
 
-network = stack_rnn(l_in1, l_mask1, num_layers, hidden_size, name='d')
+network = stack_rnn(l_emb1, l_mask1, num_layers, hidden_size, name='d')
 outputs = lasagne.layers.get_output(network, deterministic=True) * in_l
 test_fn = theano.function([in_x1, in_mask1], outputs)
 
-doc = np.ones([2, 3, 1], dtype=np.float32)
+doc = np.ones([2, 3], dtype=np.float32)
 mask = np.ones([2, 3, 1], dtype=np.float32)
 o = test_fn(doc, mask)
 
