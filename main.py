@@ -48,7 +48,7 @@ class Model(object):
     (self.doc, self.doc_len, self.ques, self.ques_len, self.label, self.ans) = \
                                   (doc, doc_len, ques, ques_len, label, ans)
     # with tf.namespace('embedding_lookup'):
-    embeddings = tf.Variable(embeddings, dtype=tf.float32, trainable=False,name='embeddings')
+    embeddings = tf.Variable(embeddings, dtype=tf.float32, name='embeddings')
     # embeddings = tf.get_variable(initializer=embeddings, dtype=tf.float32, name='embeddings')
     doc_emb = tf.nn.embedding_lookup(embeddings, doc)
     ques_emb = tf.nn.embedding_lookup(embeddings, ques)
@@ -65,8 +65,10 @@ class Model(object):
     q = tf.concat([tf.gather_nd(output_q[0], idx), output_q[1][:,0,:]], axis=1) # q = (fw_ht, bw_h1)
     # print(q.get_shape()) # (32, 256) (bz, hz)
     
+    self.d = d
+
     # bilinear attention
-    ws = tf.Variable(tf.truncated_normal([hz, hz]), name='ws')
+    ws = tf.Variable(tf.random_uniform([hz, hz], minval=-0.01, maxval=0.01), name='ws')
     alpha = tf.matmul(q, ws) # (bz, hz)
     alpha = tf.matmul(d, tf.reshape(alpha,[bz, hz, 1]))
     alpha = tf.reshape(alpha, [bz, -1]) # (bz, len)
@@ -75,11 +77,12 @@ class Model(object):
     attention = tf.reduce_sum(attention, 1)# (bz, hz)
 
     # prediction 
-    w = tf.Variable(tf.truncated_normal([hz, nl]), name='w') # [hz, nl]    
+    w = tf.Variable(tf.random_uniform([hz, nl], minval=-0.01, maxval=0.01), name='w') # [hz, nl]    
     logits = tf.matmul(attention, w) #[bz, nl] logits is unnormalized probabilities
 
     logits = logits * label # [bz, nl] [nl]
     pred = tf.arg_max(logits, -1) # [bz]
+    
     acc = tf.reduce_sum(tf.cast(tf.equal(pred, ans), dtype=tf.int64))
     self.pred = pred
     self.acc = acc
@@ -88,14 +91,18 @@ class Model(object):
       return
     
     # optimizer 
-    loss = tf.reduce_sum(
+    loss = tf.reduce_mean(
       tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=tf.one_hot(ans, nl))
     )
     optimizer = tf.train.GradientDescentOptimizer(config.learning_rate)
-    gvs = optimizer.compute_gradients(loss)
-    capped_gvs = [(tf.clip_by_value(grad, -config.grad_clipping, config.grad_clipping), var) for grad, var in gvs]
+
+    tvars = tf.trainable_variables()
+    grads, _ = tf.clip_by_global_norm(tf.gradients(loss, tvars),
+                                      config.grad_clipping)
+    capped_gvs = zip(grads, tvars)
+
     # tf.logging.set_verbosity(tf.logging.WARN)
-    global_step = tf.contrib.framework.get_or_create_global_step()
+    global_step = tf.Variable(0, trainable=False, name='global_step')
     train_op = optimizer.apply_gradients(capped_gvs, global_step=global_step)
     self.train_op = train_op
     self.loss = loss
@@ -106,9 +113,13 @@ def run_epoch(session, model, all_data, is_training=True, verbose=True):
   acc_count = 0
   total_steps = len(all_data)
 
-  np.random.shuffle(all_data)
+  # np.random.shuffle(all_data)
   for step, minibatch in enumerate(all_data):
     (doc, doc_len, ques, ques_len, labled, ans) = minibatch
+
+    # print(doc_len)
+    # exit()
+
 
     feed_dict = {
       model.doc:doc, model.doc_len:doc_len, model.ques:ques,
@@ -116,19 +127,24 @@ def run_epoch(session, model, all_data, is_training=True, verbose=True):
     }
     
     if is_training:
+      # d = session.run([model.d], feed_dict=feed_dict)
+      # print('='*40)
+      # print(d)
+      # print('='*40)
+      # exit()
       acc, loss = session.run([model.acc, model.loss], feed_dict=feed_dict)
       acc_count += acc
-      if verbose and step % 500 == 0:
-        logging.info("progress: %.0f%% acc: %.2f%% loss: %.2f step_time: %.2f" %(
+      if verbose:
+        logging.info("  %.0f%% acc: %.2f%% loss: %.2f time: %.2f" %(
           step / total_steps * 100,
           acc_count / ((step+1) * config.batch_size) * 100,
           loss,
-          (time.time() - start_time) / (step + 1)
+          time.time() - start_time
           ))
     else:
       acc, = session.run([model.acc], feed_dict=feed_dict)
       acc_count += acc
-
+    
   return acc_count / (total_steps * config.batch_size)
     
 
@@ -218,7 +234,7 @@ def main(_):
   
   with tf.Graph().as_default():
     with tf.name_scope("Train"):
-      with tf.variable_scope("Model", reuse=None):
+      with tf.variable_scope("Model", reuse=None, initializer=tf.truncated_normal_initializer(stddev=np.sqrt(0.1))): # tf.ones_initializer()
         m_train = Model(embeddings, is_training=True)
       # tf.summary.scalar("Training_Loss", m_train.loss)
       # tf.summary.scalar("Training_acc", m_train.acc)
@@ -231,23 +247,22 @@ def main(_):
     sv = tf.train.Supervisor(logdir=config.save_path)
     with sv.managed_session() as session:
 
-      # if config.test_only:
-      #   valid_acc = run_epoch(session, m_valid, all_dev)
-      #   print("Valid acc: %.3f" % valid_acc)
-      #   break
-
-      for epoch in range(config.num_epoches):
-        # lr_decay = config.lr_decay ** max(i + 1 - config.max_epoch, 0.0)
-        # m.assign_lr(session, config.learning_rate * lr_decay)
-        # np.random.shuffle(all_train)
-
-        train_acc = run_epoch(session, m_train, all_train)
-        logging.info("Epoch: %d Train acc: %.2f%%" % (epoch + 1, train_acc*100))
+      if config.test_only:
         valid_acc = run_epoch(session, m_valid, all_dev, is_training=False)
-        logging.info("Epoch: %d Valid acc: %.2f%%" % (epoch + 1, valid_acc*100))
-      # test_acc = run_epoch(session, m_test)
-      if config.save_path:
-        sv.saver.save(session, config.save_path, global_step=sv.global_step)
+        print("Valid acc: %.3f" % valid_acc)
+      else:
+        for epoch in range(config.num_epoches):
+          # lr_decay = config.lr_decay ** max(i + 1 - config.max_epoch, 0.0)
+          # m.assign_lr(session, config.learning_rate * lr_decay)
+          # np.random.shuffle(all_train)
+
+          train_acc = run_epoch(session, m_train, all_train)
+          logging.info("Epoch: %d Train acc: %.2f%%" % (epoch + 1, train_acc*100))
+          valid_acc = run_epoch(session, m_valid, all_dev, is_training=False)
+          logging.info("Epoch: %d Valid acc: %.2f%%" % (epoch + 1, valid_acc*100))
+        # test_acc = run_epoch(session, m_test)
+        if config.save_path:
+          sv.saver.save(session, config.save_path, global_step=sv.global_step)
 
   
 if __name__ == '__main__':

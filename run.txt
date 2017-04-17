@@ -1,0 +1,451 @@
+python3 main.py
+04-17 17:17 --------------------------------------------------
+04-17 17:17 Load data files..
+04-17 17:17 ********** Train
+04-17 17:17 #Examples: 1000
+04-17 17:17 ********** Dev
+04-17 17:17 #Examples: 100
+04-17 17:17 --------------------------------------------------
+04-17 17:17 Build dictionary..
+04-17 17:17 #Words: 23361 -> 23361
+04-17 17:17 ('the', 40156)
+04-17 17:17 (',', 37380)
+04-17 17:17 ('.', 31315)
+04-17 17:17 ('"', 19044)
+04-17 17:17 ('to', 19016)
+04-17 17:17 ...
+04-17 17:17 ('da', 1)
+04-17 17:17 ('34million', 1)
+04-17 17:17 ('co-ownership', 1)
+04-17 17:17 ('islamic', 1)
+04-17 17:17 ('conclusively', 1)
+04-17 17:17 Entity markers: 528
+04-17 17:17 --------------------------------------------------
+04-17 17:17 Load embedding file..
+04-17 17:17 Embeddings: 23363 x 100
+04-17 17:17 Loading embedding file: data/glove/glove.6B.100d.txt
+04-17 17:18 Pre-trained: 22328 (95.57%)
+04-17 17:18 
+	debug:	True
+	test_only:	False
+	data_path:	data/
+	embedding_file:	data/glove/glove.6B.100d.txt
+	train_file:	data/cnn/train.txt
+	dev_file:	data/cnn/dev.txt
+	test_file:	data/cnn/test.txt
+	log_file:	None
+	save_path:	model/
+	hidden_size:	128
+	num_layers:	1
+	batch_size:	32
+	num_epoches:	5
+	eval_iter:	100
+	dropout_rate:	0.2
+	learning_rate:	0.1
+	grad_clipping:	10.0
+	embedding_size:	100
+	num_train:	1000
+	num_dev:	100
+	num_labels:	528
+	vocab_size:	23363
+
+04-17 17:18 --------------------------------------------------
+04-17 17:18 Vectorize test data..
+04-17 17:18 Vectorization: processed 0 / 100
+04-17 17:18 --------------------------------------------------
+04-17 17:18 Vectorize training data..
+04-17 17:18 Vectorization: processed 0 / 1000
+W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE3 instructions, but these are available on your machine and could speed up CPU computations.
+W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+04-17 17:18   0% acc: 9.38% loss: 6.25 time: 0.31
+04-17 17:18   3% acc: 4.69% loss: 6.27 time: 0.55
+04-17 17:18   6% acc: 5.21% loss: 6.26 time: 0.86
+04-17 17:18   10% acc: 5.47% loss: 6.25 time: 1.13
+04-17 17:18   13% acc: 6.25% loss: 6.25 time: 1.43
+04-17 17:18   16% acc: 5.73% loss: 6.27 time: 1.75
+04-17 17:18   19% acc: 5.36% loss: 6.27 time: 2.08
+04-17 17:18   23% acc: 5.47% loss: 6.27 time: 2.44
+04-17 17:18   26% acc: 5.56% loss: 6.26 time: 2.82
+04-17 17:18   29% acc: 5.31% loss: 6.25 time: 3.23
+04-17 17:18   32% acc: 5.68% loss: 6.25 time: 3.66
+04-17 17:18   35% acc: 5.73% loss: 6.27 time: 4.10
+04-17 17:18   39% acc: 5.53% loss: 6.26 time: 4.57
+04-17 17:18   42% acc: 5.36% loss: 6.24 time: 5.08
+04-17 17:18   45% acc: 5.00% loss: 6.27 time: 5.62
+04-17 17:18   48% acc: 5.27% loss: 6.25 time: 6.19
+04-17 17:18   52% acc: 5.15% loss: 6.26 time: 6.78
+04-17 17:18   55% acc: 5.21% loss: 6.25 time: 7.41
+04-17 17:18   58% acc: 4.93% loss: 6.26 time: 8.05
+04-17 17:18   61% acc: 4.84% loss: 6.27 time: 8.73
+04-17 17:18   65% acc: 4.76% loss: 6.26 time: 9.43
+04-17 17:18   68% acc: 4.69% loss: 6.25 time: 10.16
+04-17 17:18   71% acc: 4.62% loss: 6.26 time: 10.92
+04-17 17:18   74% acc: 4.43% loss: 6.28 time: 11.71
+04-17 17:18   77% acc: 4.25% loss: 6.27 time: 12.53
+04-17 17:18   81% acc: 4.09% loss: 6.28 time: 13.39
+04-17 17:18   84% acc: 3.94% loss: 6.29 time: 14.33
+04-17 17:18   87% acc: 3.91% loss: 6.25 time: 15.35
+04-17 17:18   90% acc: 3.88% loss: 6.24 time: 16.44
+04-17 17:18   94% acc: 4.06% loss: 6.27 time: 17.63
+04-17 17:18   97% acc: 4.13% loss: 6.25 time: 19.06
+04-17 17:18 Epoch: 1 Train acc: 4.13%
+04-17 17:18 Epoch: 1 Valid acc: 6.25%
+04-17 17:18   0% acc: 9.38% loss: 6.23 time: 0.18
+04-17 17:18   3% acc: 6.25% loss: 6.26 time: 0.41
+04-17 17:18   6% acc: 9.38% loss: 6.26 time: 0.66
+04-17 17:18   10% acc: 8.59% loss: 6.25 time: 0.95
+04-17 17:18   13% acc: 6.88% loss: 6.25 time: 1.24
+04-17 17:18   16% acc: 8.33% loss: 6.26 time: 1.56
+04-17 17:18   19% acc: 8.04% loss: 6.27 time: 1.90
+04-17 17:18   23% acc: 7.81% loss: 6.28 time: 2.26
+04-17 17:18   26% acc: 7.64% loss: 6.25 time: 2.65
+04-17 17:18   29% acc: 7.50% loss: 6.25 time: 3.06
+04-17 17:18   32% acc: 7.39% loss: 6.27 time: 3.49
+04-17 17:18   35% acc: 7.03% loss: 6.27 time: 3.94
+04-17 17:18   39% acc: 6.73% loss: 6.29 time: 4.41
+04-17 17:18   42% acc: 6.25% loss: 6.26 time: 4.93
+04-17 17:18   45% acc: 5.83% loss: 6.27 time: 5.48
+04-17 17:18   48% acc: 5.86% loss: 6.26 time: 6.04
+04-17 17:18   52% acc: 5.88% loss: 6.26 time: 6.63
+04-17 17:18   55% acc: 5.73% loss: 6.25 time: 7.25
+04-17 17:18   58% acc: 5.59% loss: 6.26 time: 7.90
+04-17 17:18   61% acc: 5.47% loss: 6.26 time: 8.57
+04-17 17:18   65% acc: 5.51% loss: 6.25 time: 9.28
+04-17 17:18   68% acc: 5.97% loss: 6.25 time: 10.00
+04-17 17:18   71% acc: 5.98% loss: 6.26 time: 10.76
+04-17 17:18   74% acc: 5.86% loss: 6.28 time: 11.55
+04-17 17:18   77% acc: 5.75% loss: 6.27 time: 12.37
+04-17 17:18   81% acc: 5.65% loss: 6.27 time: 13.25
+04-17 17:18   84% acc: 5.56% loss: 6.27 time: 14.19
+04-17 17:18   87% acc: 5.36% loss: 6.28 time: 15.21
+04-17 17:18   90% acc: 5.39% loss: 6.25 time: 16.31
+04-17 17:18   94% acc: 5.21% loss: 6.28 time: 17.49
+04-17 17:18   97% acc: 5.04% loss: 6.27 time: 18.92
+04-17 17:18 Epoch: 2 Train acc: 5.04%
+04-17 17:18 Epoch: 2 Valid acc: 6.25%
+04-17 17:18   0% acc: 3.12% loss: 6.28 time: 0.18
+04-17 17:18   3% acc: 10.94% loss: 6.25 time: 0.41
+04-17 17:18   6% acc: 10.42% loss: 6.24 time: 0.66
+04-17 17:18   10% acc: 8.59% loss: 6.25 time: 0.94
+04-17 17:18   13% acc: 8.75% loss: 6.26 time: 1.23
+04-17 17:18   16% acc: 7.81% loss: 6.28 time: 1.55
+04-17 17:18   19% acc: 7.59% loss: 6.29 time: 1.89
+04-17 17:18   23% acc: 7.81% loss: 6.25 time: 2.25
+04-17 17:18   26% acc: 7.29% loss: 6.25 time: 2.64
+04-17 17:18   29% acc: 7.81% loss: 6.25 time: 3.04
+04-17 17:18   32% acc: 7.39% loss: 6.27 time: 3.47
+04-17 17:18   35% acc: 6.77% loss: 6.26 time: 3.91
+04-17 17:18   39% acc: 6.73% loss: 6.27 time: 4.38
+04-17 17:18   42% acc: 6.47% loss: 6.27 time: 4.89
+04-17 17:18   45% acc: 6.04% loss: 6.28 time: 5.43
+04-17 17:18   48% acc: 6.05% loss: 6.28 time: 6.00
+04-17 17:18   52% acc: 5.70% loss: 6.26 time: 6.58
+04-17 17:18   55% acc: 5.90% loss: 6.25 time: 7.20
+04-17 17:18   58% acc: 5.59% loss: 6.26 time: 7.86
+04-17 17:18   61% acc: 5.47% loss: 6.28 time: 8.52
+04-17 17:18   65% acc: 5.36% loss: 6.25 time: 9.22
+04-17 17:18   68% acc: 5.11% loss: 6.25 time: 9.96
+04-17 17:18   71% acc: 5.16% loss: 6.25 time: 10.72
+04-17 17:18   74% acc: 4.95% loss: 6.27 time: 11.52
+04-17 17:19   77% acc: 5.00% loss: 6.27 time: 12.34
+04-17 17:19   81% acc: 4.93% loss: 6.27 time: 13.22
+04-17 17:19   84% acc: 4.75% loss: 6.29 time: 14.17
+04-17 17:19   87% acc: 4.69% loss: 6.27 time: 15.18
+04-17 17:19   90% acc: 4.63% loss: 6.24 time: 16.28
+04-17 17:19   94% acc: 4.58% loss: 6.26 time: 17.46
+04-17 17:19   97% acc: 4.64% loss: 6.23 time: 18.89
+04-17 17:19 Epoch: 3 Train acc: 4.64%
+04-17 17:19 Epoch: 3 Valid acc: 6.25%
+04-17 17:19   0% acc: 21.88% loss: 6.25 time: 0.18
+04-17 17:19   3% acc: 17.19% loss: 6.27 time: 0.40
+04-17 17:19   6% acc: 15.62% loss: 6.25 time: 0.66
+04-17 17:19   10% acc: 14.06% loss: 6.25 time: 0.93
+04-17 17:19   13% acc: 12.50% loss: 6.27 time: 1.24
+04-17 17:19   16% acc: 10.94% loss: 6.26 time: 1.55
+04-17 17:19   19% acc: 9.82% loss: 6.28 time: 1.89
+04-17 17:19   23% acc: 8.59% loss: 6.28 time: 2.25
+04-17 17:19   26% acc: 8.33% loss: 6.27 time: 2.63
+04-17 17:19   29% acc: 8.12% loss: 6.26 time: 3.05
+04-17 17:19   32% acc: 7.39% loss: 6.27 time: 3.48
+04-17 17:19   35% acc: 7.03% loss: 6.27 time: 3.92
+04-17 17:19   39% acc: 6.73% loss: 6.28 time: 4.38
+04-17 17:19   42% acc: 6.47% loss: 6.28 time: 4.89
+04-17 17:19   45% acc: 6.04% loss: 6.27 time: 5.43
+04-17 17:19   48% acc: 5.66% loss: 6.27 time: 5.99
+04-17 17:19   52% acc: 5.70% loss: 6.26 time: 6.59
+04-17 17:19   55% acc: 5.56% loss: 6.26 time: 7.21
+04-17 17:19   58% acc: 5.26% loss: 6.26 time: 7.86
+04-17 17:19   61% acc: 5.16% loss: 6.28 time: 8.54
+04-17 17:19   65% acc: 5.21% loss: 6.26 time: 9.24
+04-17 17:19   68% acc: 4.97% loss: 6.26 time: 9.97
+04-17 17:19   71% acc: 4.89% loss: 6.26 time: 10.73
+04-17 17:19   74% acc: 4.95% loss: 6.25 time: 11.52
+04-17 17:19   77% acc: 4.88% loss: 6.26 time: 12.35
+04-17 17:19   81% acc: 4.69% loss: 6.27 time: 13.23
+04-17 17:19   84% acc: 4.63% loss: 6.29 time: 14.16
+04-17 17:19   87% acc: 4.58% loss: 6.26 time: 15.17
+04-17 17:19   90% acc: 4.42% loss: 6.27 time: 16.26
+04-17 17:19   94% acc: 4.48% loss: 6.25 time: 17.45
+04-17 17:19   97% acc: 4.54% loss: 6.25 time: 18.86
+04-17 17:19 Epoch: 4 Train acc: 4.54%
+04-17 17:19 Epoch: 4 Valid acc: 6.25%
+04-17 17:19   0% acc: 12.50% loss: 6.25 time: 0.18
+04-17 17:19   3% acc: 9.38% loss: 6.24 time: 0.40
+04-17 17:19   6% acc: 7.29% loss: 6.25 time: 0.65
+04-17 17:19   10% acc: 7.81% loss: 6.26 time: 0.93
+04-17 17:19   13% acc: 6.88% loss: 6.29 time: 1.22
+04-17 17:19   16% acc: 6.25% loss: 6.26 time: 1.54
+04-17 17:19   19% acc: 5.36% loss: 6.27 time: 1.88
+04-17 17:19   23% acc: 5.47% loss: 6.27 time: 2.24
+04-17 17:19   26% acc: 5.56% loss: 6.26 time: 2.62
+04-17 17:19   29% acc: 5.94% loss: 6.25 time: 3.03
+04-17 17:19   32% acc: 5.68% loss: 6.27 time: 3.46
+04-17 17:19   35% acc: 5.47% loss: 6.26 time: 3.90
+04-17 17:19   39% acc: 5.05% loss: 6.28 time: 4.38
+04-17 17:19   42% acc: 5.36% loss: 6.27 time: 4.89
+04-17 17:19   45% acc: 5.42% loss: 6.27 time: 5.43
+04-17 17:19   48% acc: 5.47% loss: 6.26 time: 6.00
+04-17 17:19   52% acc: 5.15% loss: 6.28 time: 6.58
+04-17 17:19   55% acc: 5.21% loss: 6.25 time: 7.19
+04-17 17:19   58% acc: 4.93% loss: 6.25 time: 7.84
+04-17 17:19   61% acc: 5.47% loss: 6.26 time: 8.51
+04-17 17:19   65% acc: 5.65% loss: 6.25 time: 9.21
+04-17 17:19   68% acc: 5.97% loss: 6.24 time: 9.93
+04-17 17:19   71% acc: 5.71% loss: 6.27 time: 10.70
+04-17 17:19   74% acc: 5.47% loss: 6.25 time: 11.49
+04-17 17:19   77% acc: 5.50% loss: 6.26 time: 12.32
+04-17 17:19   81% acc: 5.53% loss: 6.26 time: 13.19
+04-17 17:19   84% acc: 5.32% loss: 6.28 time: 14.14
+04-17 17:19   87% acc: 5.13% loss: 6.27 time: 15.15
+04-17 17:19   90% acc: 4.96% loss: 6.24 time: 16.25
+04-17 17:19   94% acc: 4.79% loss: 6.27 time: 17.45
+04-17 17:19   97% acc: 4.64% loss: 6.26 time: 18.89
+04-17 17:19 Epoch: 5 Train acc: 4.64%
+04-17 17:19 Epoch: 5 Valid acc: 6.25%
+
+
+
+
+
+
+
+
+
+python2 code/main.py 
+04-17 16:59 code/main.py
+04-17 16:59 --------------------------------------------------
+04-17 16:59 Load data files..
+04-17 16:59 ********** Train
+04-17 16:59 #Examples: 1000
+04-17 16:59 ********** Dev
+04-17 16:59 #Examples: 100
+04-17 16:59 --------------------------------------------------
+04-17 16:59 Build dictionary..
+04-17 16:59 #Words: 23362 -> 23362
+04-17 16:59 ('the', 40156)
+04-17 16:59 (',', 37380)
+04-17 16:59 ('.', 31315)
+04-17 16:59 ('"', 19044)
+04-17 16:59 ('to', 19016)
+04-17 16:59 ...
+04-17 16:59 ('overspending', 1)
+04-17 16:59 ('lance', 1)
+04-17 16:59 ('junk', 1)
+04-17 16:59 ('rotting', 1)
+04-17 16:59 ('mosaics', 1)
+04-17 16:59 Entity markers: 528
+04-17 16:59 --------------------------------------------------
+04-17 16:59 Embeddings: 23364 x 100
+04-17 16:59 Loading embedding file: /home/lzh/work/python/qa-rc/rc-cnn-dailymail/data/glove/glove.6B.100d.txt
+04-17 16:59 Pre-trained: 22328 (95.57%)
+04-17 16:59 Compile functions..
+04-17 16:59 #params: 2889376
+04-17 16:59 <lasagne.layers.input.InputLayer object at 0x7fcf066e26d0>
+04-17 16:59 <lasagne.layers.embedding.EmbeddingLayer object at 0x7fcf066e2750>
+04-17 16:59 <lasagne.layers.input.InputLayer object at 0x7fcf066e2710>
+04-17 16:59 <lasagne.layers.recurrent.GRULayer object at 0x7fcf069d7210>
+04-17 16:59 <lasagne.layers.recurrent.GRULayer object at 0x7fcf069f54d0>
+04-17 16:59 <lasagne.layers.merge.ConcatLayer object at 0x7fcf069d71d0>
+04-17 16:59 <lasagne.layers.input.InputLayer object at 0x7fcf074bc4d0>
+04-17 16:59 <lasagne.layers.embedding.EmbeddingLayer object at 0x7fcf069d7190>
+04-17 16:59 <lasagne.layers.input.InputLayer object at 0x7fcf069d7150>
+04-17 16:59 <lasagne.layers.recurrent.GRULayer object at 0x7fcf069fd590>
+04-17 16:59 <lasagne.layers.recurrent.GRULayer object at 0x7fcf06a05350>
+04-17 16:59 <lasagne.layers.merge.ConcatLayer object at 0x7fcf069fd450>
+04-17 16:59 <nn_layers.BilinearAttentionLayer object at 0x7fcf06a0c2d0>
+04-17 16:59 <lasagne.layers.dense.DenseLayer object at 0x7fcf06a0c410>
+04-17 17:00 Done.
+04-17 17:00 --------------------------------------------------
+04-17 17:00 Namespace(att_func='bilinear', batch_size=32, bidir=True, debug=True, dev_file='/home/lzh/work/python/qa-rc/rc-cnn-dailymail/data/cnn/dev.txt', dropout_rate=0.0, embedding_file='/home/lzh/work/python/qa-rc/rc-cnn-dailymail/data/glove/glove.6B.100d.txt', embedding_size=100, eval_iter=100, grad_clipping=10.0, hidden_size=128, learning_rate=0.1, log_file=None, max_dev=None, model_file='model.pkl.gz', num_dev=100, num_epoches=5, num_labels=528, num_layers=1, num_train=1000, optimizer='sgd', pre_trained=None, random_seed=1013, relabeling=True, rnn_layer=<class 'lasagne.layers.recurrent.GRULayer'>, rnn_output_size=256, rnn_type='gru', test_only=False, train_file='/home/lzh/work/python/qa-rc/rc-cnn-dailymail/data/cnn/train.txt', vocab_size=23364)
+04-17 17:00 --------------------------------------------------
+04-17 17:00 Intial test..
+04-17 17:00 Vectorization: processed 0 / 100
+04-17 17:00 Dev accuracy: 2.00 %
+04-17 17:00 --------------------------------------------------
+04-17 17:00 Start training..
+04-17 17:00 Vectorization: processed 0 / 1000
+04-17 17:00 Epoch 0 iter 0 loss 2.46 time 1.15
+04-17 17:00 Epoch 0 iter 1 loss 2.59 time 2.54
+04-17 17:00 Epoch 0 iter 2 loss 2.46 time 4.13
+04-17 17:00 Epoch 0 iter 3 loss 2.80 time 5.89
+04-17 17:00 Epoch 0 iter 4 loss 2.53 time 7.74
+04-17 17:00 Epoch 0 iter 5 loss 2.72 time 9.74
+04-17 17:00 Epoch 0 iter 6 loss 2.46 time 11.85
+04-17 17:00 Epoch 0 iter 7 loss 2.41 time 14.12
+04-17 17:00 Epoch 0 iter 8 loss 2.71 time 17.04
+04-17 17:00 Epoch 0 iter 9 loss 2.61 time 19.62
+04-17 17:00 Epoch 0 iter 10 loss 2.83 time 22.33
+04-17 17:00 Epoch 0 iter 11 loss 2.75 time 25.13
+04-17 17:00 Epoch 0 iter 12 loss 2.59 time 28.14
+04-17 17:00 Epoch 0 iter 13 loss 2.65 time 31.42
+04-17 17:00 Epoch 0 iter 14 loss 3.04 time 34.88
+04-17 17:01 Epoch 0 iter 15 loss 2.75 time 38.45
+04-17 17:01 Epoch 0 iter 16 loss 2.99 time 42.13
+04-17 17:01 Epoch 0 iter 17 loss 2.91 time 46.02
+04-17 17:01 Epoch 0 iter 18 loss 2.73 time 50.12
+04-17 17:01 Epoch 0 iter 19 loss 2.90 time 54.40
+04-17 17:01 Epoch 0 iter 20 loss 2.89 time 58.78
+04-17 17:01 Epoch 0 iter 21 loss 2.84 time 63.57
+04-17 17:01 Epoch 0 iter 22 loss 3.21 time 68.66
+04-17 17:01 Epoch 0 iter 23 loss 2.88 time 73.56
+04-17 17:01 Epoch 0 iter 24 loss 3.02 time 78.89
+04-17 17:01 Epoch 0 iter 25 loss 2.87 time 84.34
+04-17 17:01 Epoch 0 iter 26 loss 3.18 time 90.29
+04-17 17:02 Epoch 0 iter 27 loss 3.13 time 96.76
+04-17 17:02 Epoch 0 iter 28 loss 3.00 time 103.73
+04-17 17:02 Epoch 0 iter 29 loss 3.02 time 111.28
+04-17 17:02 Epoch 0 iter 30 loss 3.00 time 122.08
+04-17 17:02 Epoch 0 iter 31 loss 4.03 time 124.95
+04-17 17:02 Epoch 1 iter 0 loss 2.16 time 126.34
+04-17 17:02 Epoch 1 iter 1 loss 2.31 time 128.23
+04-17 17:02 Epoch 1 iter 2 loss 2.11 time 129.95
+04-17 17:02 Epoch 1 iter 3 loss 2.73 time 132.01
+04-17 17:02 Epoch 1 iter 4 loss 2.37 time 134.30
+04-17 17:02 Epoch 1 iter 5 loss 2.77 time 136.73
+04-17 17:02 Epoch 1 iter 6 loss 2.42 time 139.14
+04-17 17:02 Epoch 1 iter 7 loss 2.47 time 141.44
+04-17 17:02 Epoch 1 iter 8 loss 2.66 time 144.03
+04-17 17:02 Epoch 1 iter 9 loss 2.58 time 147.20
+04-17 17:02 Epoch 1 iter 10 loss 2.75 time 152.40
+04-17 17:02 Epoch 1 iter 11 loss 2.68 time 155.12
+04-17 17:03 Epoch 1 iter 12 loss 2.48 time 158.14
+04-17 17:03 Epoch 1 iter 13 loss 2.60 time 161.28
+04-17 17:03 Epoch 1 iter 14 loss 2.97 time 165.36
+04-17 17:03 Epoch 1 iter 15 loss 2.72 time 169.51
+04-17 17:03 Epoch 1 iter 16 loss 2.98 time 173.28
+04-17 17:03 Epoch 1 iter 17 loss 2.89 time 177.38
+04-17 17:03 Epoch 1 iter 18 loss 2.69 time 181.48
+04-17 17:03 Epoch 1 iter 19 loss 2.82 time 187.60
+04-17 17:03 Epoch 1 iter 20 loss 2.86 time 193.60
+04-17 17:03 Epoch 1 iter 21 loss 2.80 time 199.50
+04-17 17:03 Epoch 1 iter 22 loss 3.15 time 205.43
+04-17 17:03 Epoch 1 iter 23 loss 2.85 time 210.78
+04-17 17:03 Epoch 1 iter 24 loss 2.98 time 215.77
+04-17 17:04 Epoch 1 iter 25 loss 2.84 time 221.26
+04-17 17:04 Epoch 1 iter 26 loss 3.19 time 227.14
+04-17 17:04 Epoch 1 iter 27 loss 3.08 time 233.30
+04-17 17:04 Epoch 1 iter 28 loss 2.93 time 240.18
+04-17 17:04 Epoch 1 iter 29 loss 2.98 time 247.43
+04-17 17:04 Epoch 1 iter 30 loss 2.93 time 256.11
+04-17 17:04 Epoch 1 iter 31 loss 3.88 time 258.81
+04-17 17:04 Epoch 2 iter 0 loss 2.10 time 259.90
+04-17 17:04 Epoch 2 iter 1 loss 2.27 time 261.30
+04-17 17:04 Epoch 2 iter 2 loss 2.09 time 263.04
+04-17 17:04 Epoch 2 iter 3 loss 2.72 time 264.73
+04-17 17:04 Epoch 2 iter 4 loss 2.35 time 266.51
+04-17 17:04 Epoch 2 iter 5 loss 2.76 time 268.46
+04-17 17:04 Epoch 2 iter 6 loss 2.42 time 270.59
+04-17 17:04 Epoch 2 iter 7 loss 2.46 time 272.79
+04-17 17:04 Epoch 2 iter 8 loss 2.63 time 275.12
+04-17 17:05 Epoch 2 iter 9 loss 2.57 time 277.70
+04-17 17:05 Epoch 2 iter 10 loss 2.71 time 280.34
+04-17 17:05 Epoch 2 iter 11 loss 2.67 time 283.03
+04-17 17:05 Epoch 2 iter 12 loss 2.46 time 285.98
+04-17 17:05 Epoch 2 iter 13 loss 2.60 time 289.09
+04-17 17:05 Epoch 2 iter 14 loss 2.93 time 292.35
+04-17 17:05 Epoch 2 iter 15 loss 2.71 time 295.79
+04-17 17:05 Epoch 2 iter 16 loss 2.97 time 299.65
+04-17 17:05 Epoch 2 iter 17 loss 2.88 time 304.71
+04-17 17:05 Epoch 2 iter 18 loss 2.68 time 309.71
+04-17 17:05 Epoch 2 iter 19 loss 2.79 time 314.36
+04-17 17:05 Epoch 2 iter 20 loss 2.86 time 319.33
+04-17 17:05 Epoch 2 iter 21 loss 2.78 time 323.92
+04-17 17:05 Epoch 2 iter 22 loss 3.11 time 329.32
+04-17 17:05 Epoch 2 iter 23 loss 2.85 time 334.85
+04-17 17:06 Epoch 2 iter 24 loss 2.96 time 341.70
+04-17 17:06 Epoch 2 iter 25 loss 2.82 time 347.35
+04-17 17:06 Epoch 2 iter 26 loss 3.19 time 354.37
+04-17 17:06 Epoch 2 iter 27 loss 3.04 time 361.63
+04-17 17:06 Epoch 2 iter 28 loss 2.89 time 368.33
+04-17 17:06 Epoch 2 iter 29 loss 2.95 time 375.62
+04-17 17:06 Epoch 2 iter 30 loss 2.90 time 384.36
+04-17 17:06 Epoch 2 iter 31 loss 3.76 time 387.16
+04-17 17:06 Epoch 3 iter 0 loss 2.06 time 388.23
+04-17 17:06 Epoch 3 iter 1 loss 2.25 time 389.58
+04-17 17:06 Epoch 3 iter 2 loss 2.07 time 391.13
+04-17 17:06 Epoch 3 iter 3 loss 2.71 time 392.92
+04-17 17:07 Train accuracy: 17.00 %
+04-17 17:07 Dev accuracy: 8.00 %
+04-17 17:07 Best dev accuracy: epoch = 3, n_udpates = 100, acc = 8.00 %
+04-17 17:07 Epoch 3 iter 4 loss 2.34 time 406.73
+04-17 17:07 Epoch 3 iter 5 loss 2.75 time 408.71
+04-17 17:07 Epoch 3 iter 6 loss 2.42 time 410.85
+04-17 17:07 Epoch 3 iter 7 loss 2.44 time 413.06
+04-17 17:07 Epoch 3 iter 8 loss 2.61 time 415.42
+04-17 17:07 Epoch 3 iter 9 loss 2.56 time 418.10
+04-17 17:07 Epoch 3 iter 10 loss 2.69 time 421.00
+04-17 17:07 Epoch 3 iter 11 loss 2.66 time 424.07
+04-17 17:07 Epoch 3 iter 12 loss 2.45 time 427.42
+04-17 17:07 Epoch 3 iter 13 loss 2.60 time 432.46
+04-17 17:07 Epoch 3 iter 14 loss 2.91 time 436.64
+04-17 17:07 Epoch 3 iter 15 loss 2.71 time 440.63
+04-17 17:07 Epoch 3 iter 16 loss 2.96 time 444.27
+04-17 17:07 Epoch 3 iter 17 loss 2.87 time 448.18
+04-17 17:07 Epoch 3 iter 18 loss 2.67 time 452.16
+04-17 17:08 Epoch 3 iter 19 loss 2.78 time 456.94
+04-17 17:08 Epoch 3 iter 20 loss 2.86 time 462.68
+04-17 17:08 Epoch 3 iter 21 loss 2.76 time 468.27
+04-17 17:08 Epoch 3 iter 22 loss 3.09 time 473.18
+04-17 17:08 Epoch 3 iter 23 loss 2.85 time 479.55
+04-17 17:08 Epoch 3 iter 24 loss 2.95 time 485.64
+04-17 17:08 Epoch 3 iter 25 loss 2.82 time 492.06
+04-17 17:08 Epoch 3 iter 26 loss 3.19 time 498.31
+04-17 17:08 Epoch 3 iter 27 loss 3.02 time 504.93
+04-17 17:08 Epoch 3 iter 28 loss 2.86 time 512.10
+04-17 17:09 Epoch 3 iter 29 loss 2.93 time 519.84
+04-17 17:09 Epoch 3 iter 30 loss 2.88 time 531.26
+04-17 17:09 Epoch 3 iter 31 loss 3.65 time 534.15
+04-17 17:09 Epoch 4 iter 0 loss 2.04 time 535.50
+04-17 17:09 Epoch 4 iter 1 loss 2.24 time 537.22
+04-17 17:09 Epoch 4 iter 2 loss 2.05 time 538.86
+04-17 17:09 Epoch 4 iter 3 loss 2.70 time 540.57
+04-17 17:09 Epoch 4 iter 4 loss 2.33 time 542.37
+04-17 17:09 Epoch 4 iter 5 loss 2.75 time 544.36
+04-17 17:09 Epoch 4 iter 6 loss 2.42 time 546.48
+04-17 17:09 Epoch 4 iter 7 loss 2.43 time 548.84
+04-17 17:09 Epoch 4 iter 8 loss 2.60 time 551.33
+04-17 17:09 Epoch 4 iter 9 loss 2.55 time 553.91
+04-17 17:09 Epoch 4 iter 10 loss 2.68 time 557.10
+04-17 17:09 Epoch 4 iter 11 loss 2.65 time 560.74
+04-17 17:09 Epoch 4 iter 12 loss 2.44 time 563.97
+04-17 17:09 Epoch 4 iter 13 loss 2.59 time 567.17
+04-17 17:09 Epoch 4 iter 14 loss 2.89 time 570.44
+04-17 17:09 Epoch 4 iter 15 loss 2.70 time 573.99
+04-17 17:10 Epoch 4 iter 16 loss 2.95 time 577.64
+04-17 17:10 Epoch 4 iter 17 loss 2.86 time 581.47
+04-17 17:10 Epoch 4 iter 18 loss 2.66 time 586.44
+04-17 17:10 Epoch 4 iter 19 loss 2.76 time 591.39
+04-17 17:10 Epoch 4 iter 20 loss 2.86 time 595.81
+04-17 17:10 Epoch 4 iter 21 loss 2.75 time 600.38
+04-17 17:10 Epoch 4 iter 22 loss 3.07 time 605.46
+04-17 17:10 Epoch 4 iter 23 loss 2.84 time 610.56
+04-17 17:10 Epoch 4 iter 24 loss 2.94 time 615.96
+04-17 17:10 Epoch 4 iter 25 loss 2.81 time 621.30
+04-17 17:10 Epoch 4 iter 26 loss 3.19 time 627.04
+04-17 17:10 Epoch 4 iter 27 loss 3.01 time 634.15
+04-17 17:11 Epoch 4 iter 28 loss 2.84 time 641.83
+04-17 17:11 Epoch 4 iter 29 loss 2.92 time 649.10
+04-17 17:11 Epoch 4 iter 30 loss 2.87 time 657.87
+04-17 17:11 Epoch 4 iter 31 loss 3.53 time 660.76
