@@ -19,12 +19,10 @@ def _bi_rnn(inputs, seq_len, is_training=True, scope=None):
   def gru_cell():
     return tf.contrib.rnn.GRUCell(config.hidden_size)
   cell = gru_cell
-
   if is_training and config.dropout_rate < 1:
     def cell():
       return tf.contrib.rnn.DropoutWrapper(
             gru_cell(), output_keep_prob=config.dropout_rate)
-
   cell_fw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
   cell_bw = tf.contrib.rnn.MultiRNNCell([cell() for _ in range(config.num_layers)] )
 
@@ -106,6 +104,7 @@ class Model(object):
     train_op = optimizer.apply_gradients(capped_gvs, global_step=global_step)
     self.train_op = train_op
     self.loss = loss
+    self.global_step = global_step
 
 def run_epoch(session, model, all_data, is_training=True, verbose=True):
   start_time = time.time()
@@ -244,7 +243,8 @@ def main(_):
         m_valid = Model(embeddings, is_training=False)
       # tf.summary.scalar("Valid_acc", m_valid.acc)
     
-    sv = tf.train.Supervisor(logdir=config.save_path)
+    sv = tf.train.Supervisor(logdir=config.save_path, summary_op=None, 
+                                save_model_secs=0, global_step=m_train.global_step)
     with sv.managed_session() as session:
 
       if config.test_only:
