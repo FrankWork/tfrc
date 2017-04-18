@@ -230,7 +230,8 @@ WARNING:tensorflow:Standard services need a 'logdir' passed to the SessionManage
 04-18 17:18 Epoch: 5 Train acc: 16.13%
 04-18 17:18 Epoch: 5 Valid acc: 19.79%
 
-
+04-18 18:24 Epoch: 5 Train acc: 17.24%
+04-18 18:24 Epoch: 5 Valid acc: 20.83%
 
 
 
