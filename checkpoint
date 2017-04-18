@@ -1,0 +1,6 @@
+model_checkpoint_path: "tmp_out-93"
+all_model_checkpoint_paths: "tmp_out/model.ckpt-39"
+all_model_checkpoint_paths: "tmp_out-49"
+all_model_checkpoint_paths: "tmp_out/model.ckpt-39"
+all_model_checkpoint_paths: "tmp_out/model.ckpt-83"
+all_model_checkpoint_paths: "tmp_out-93"

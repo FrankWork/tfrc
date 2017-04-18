@@ -173,7 +173,7 @@ def gen_embeddings(word_dict, dim, in_file=None):
                 embeddings[word_dict[sp[0]]] = [float(x) for x in sp[1:]]
         logging.info('Pre-trained: %d (%.2f%%)' %
                      (pre_trained, pre_trained * 100.0 / num_words))
-    return embeddings
+    return embeddings.astype(np.float32)
 
 def gen_examples(x1, x2, l, y, batch_size):
     """

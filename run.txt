@@ -1,31 +1,31 @@
 python3 main.py
-04-17 17:17 --------------------------------------------------
-04-17 17:17 Load data files..
-04-17 17:17 ********** Train
-04-17 17:17 #Examples: 1000
-04-17 17:17 ********** Dev
-04-17 17:17 #Examples: 100
-04-17 17:17 --------------------------------------------------
-04-17 17:17 Build dictionary..
-04-17 17:17 #Words: 23361 -> 23361
-04-17 17:17 ('the', 40156)
-04-17 17:17 (',', 37380)
-04-17 17:17 ('.', 31315)
-04-17 17:17 ('"', 19044)
-04-17 17:17 ('to', 19016)
-04-17 17:17 ...
-04-17 17:17 ('da', 1)
-04-17 17:17 ('34million', 1)
-04-17 17:17 ('co-ownership', 1)
-04-17 17:17 ('islamic', 1)
-04-17 17:17 ('conclusively', 1)
-04-17 17:17 Entity markers: 528
-04-17 17:17 --------------------------------------------------
-04-17 17:17 Load embedding file..
-04-17 17:17 Embeddings: 23363 x 100
-04-17 17:17 Loading embedding file: data/glove/glove.6B.100d.txt
-04-17 17:18 Pre-trained: 22328 (95.57%)
-04-17 17:18 
+04-18 16:31 --------------------------------------------------
+04-18 16:31 Load data files..
+04-18 16:31 ********** Train
+04-18 16:31 #Examples: 1000
+04-18 16:31 ********** Dev
+04-18 16:31 #Examples: 100
+04-18 16:31 --------------------------------------------------
+04-18 16:31 Build dictionary..
+04-18 16:31 #Words: 23361 -> 23361
+04-18 16:31 ('the', 40156)
+04-18 16:31 (',', 37380)
+04-18 16:31 ('.', 31315)
+04-18 16:31 ('"', 19044)
+04-18 16:31 ('to', 19016)
+04-18 16:31 ...
+04-18 16:31 ('da', 1)
+04-18 16:31 ('34million', 1)
+04-18 16:31 ('co-ownership', 1)
+04-18 16:31 ('islamic', 1)
+04-18 16:31 ('conclusively', 1)
+04-18 16:31 Entity markers: 528
+04-18 16:31 --------------------------------------------------
+04-18 16:31 Load embedding file..
+04-18 16:31 Embeddings: 23363 x 100
+04-18 16:31 Loading embedding file: data/glove/glove.6B.100d.txt
+04-18 16:31 Pre-trained: 22328 (95.57%)
+04-18 16:31 
 	debug:	True
 	test_only:	False
 	data_path:	data/
@@ -40,7 +40,7 @@ python3 main.py
 	batch_size:	32
 	num_epoches:	5
 	eval_iter:	100
-	dropout_rate:	0.2
+	dropout_rate:	0.8
 	learning_rate:	0.1
 	grad_clipping:	10.0
 	embedding_size:	100
@@ -49,181 +49,186 @@ python3 main.py
 	num_labels:	528
 	vocab_size:	23363
 
-04-17 17:18 --------------------------------------------------
-04-17 17:18 Vectorize test data..
-04-17 17:18 Vectorization: processed 0 / 100
-04-17 17:18 --------------------------------------------------
-04-17 17:18 Vectorize training data..
-04-17 17:18 Vectorization: processed 0 / 1000
+04-18 16:31 --------------------------------------------------
+04-18 16:31 Vectorize test data..
+04-18 16:31 Vectorization: processed 0 / 100
+04-18 16:31 --------------------------------------------------
+04-18 16:31 Vectorize training data..
+04-18 16:31 Vectorization: processed 0 / 1000
 W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE3 instructions, but these are available on your machine and could speed up CPU computations.
 W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
 W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
 W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
-04-17 17:18   0% acc: 9.38% loss: 6.25 time: 0.31
-04-17 17:18   3% acc: 4.69% loss: 6.27 time: 0.55
-04-17 17:18   6% acc: 5.21% loss: 6.26 time: 0.86
-04-17 17:18   10% acc: 5.47% loss: 6.25 time: 1.13
-04-17 17:18   13% acc: 6.25% loss: 6.25 time: 1.43
-04-17 17:18   16% acc: 5.73% loss: 6.27 time: 1.75
-04-17 17:18   19% acc: 5.36% loss: 6.27 time: 2.08
-04-17 17:18   23% acc: 5.47% loss: 6.27 time: 2.44
-04-17 17:18   26% acc: 5.56% loss: 6.26 time: 2.82
-04-17 17:18   29% acc: 5.31% loss: 6.25 time: 3.23
-04-17 17:18   32% acc: 5.68% loss: 6.25 time: 3.66
-04-17 17:18   35% acc: 5.73% loss: 6.27 time: 4.10
-04-17 17:18   39% acc: 5.53% loss: 6.26 time: 4.57
-04-17 17:18   42% acc: 5.36% loss: 6.24 time: 5.08
-04-17 17:18   45% acc: 5.00% loss: 6.27 time: 5.62
-04-17 17:18   48% acc: 5.27% loss: 6.25 time: 6.19
-04-17 17:18   52% acc: 5.15% loss: 6.26 time: 6.78
-04-17 17:18   55% acc: 5.21% loss: 6.25 time: 7.41
-04-17 17:18   58% acc: 4.93% loss: 6.26 time: 8.05
-04-17 17:18   61% acc: 4.84% loss: 6.27 time: 8.73
-04-17 17:18   65% acc: 4.76% loss: 6.26 time: 9.43
-04-17 17:18   68% acc: 4.69% loss: 6.25 time: 10.16
-04-17 17:18   71% acc: 4.62% loss: 6.26 time: 10.92
-04-17 17:18   74% acc: 4.43% loss: 6.28 time: 11.71
-04-17 17:18   77% acc: 4.25% loss: 6.27 time: 12.53
-04-17 17:18   81% acc: 4.09% loss: 6.28 time: 13.39
-04-17 17:18   84% acc: 3.94% loss: 6.29 time: 14.33
-04-17 17:18   87% acc: 3.91% loss: 6.25 time: 15.35
-04-17 17:18   90% acc: 3.88% loss: 6.24 time: 16.44
-04-17 17:18   94% acc: 4.06% loss: 6.27 time: 17.63
-04-17 17:18   97% acc: 4.13% loss: 6.25 time: 19.06
-04-17 17:18 Epoch: 1 Train acc: 4.13%
-04-17 17:18 Epoch: 1 Valid acc: 6.25%
-04-17 17:18   0% acc: 9.38% loss: 6.23 time: 0.18
-04-17 17:18   3% acc: 6.25% loss: 6.26 time: 0.41
-04-17 17:18   6% acc: 9.38% loss: 6.26 time: 0.66
-04-17 17:18   10% acc: 8.59% loss: 6.25 time: 0.95
-04-17 17:18   13% acc: 6.88% loss: 6.25 time: 1.24
-04-17 17:18   16% acc: 8.33% loss: 6.26 time: 1.56
-04-17 17:18   19% acc: 8.04% loss: 6.27 time: 1.90
-04-17 17:18   23% acc: 7.81% loss: 6.28 time: 2.26
-04-17 17:18   26% acc: 7.64% loss: 6.25 time: 2.65
-04-17 17:18   29% acc: 7.50% loss: 6.25 time: 3.06
-04-17 17:18   32% acc: 7.39% loss: 6.27 time: 3.49
-04-17 17:18   35% acc: 7.03% loss: 6.27 time: 3.94
-04-17 17:18   39% acc: 6.73% loss: 6.29 time: 4.41
-04-17 17:18   42% acc: 6.25% loss: 6.26 time: 4.93
-04-17 17:18   45% acc: 5.83% loss: 6.27 time: 5.48
-04-17 17:18   48% acc: 5.86% loss: 6.26 time: 6.04
-04-17 17:18   52% acc: 5.88% loss: 6.26 time: 6.63
-04-17 17:18   55% acc: 5.73% loss: 6.25 time: 7.25
-04-17 17:18   58% acc: 5.59% loss: 6.26 time: 7.90
-04-17 17:18   61% acc: 5.47% loss: 6.26 time: 8.57
-04-17 17:18   65% acc: 5.51% loss: 6.25 time: 9.28
-04-17 17:18   68% acc: 5.97% loss: 6.25 time: 10.00
-04-17 17:18   71% acc: 5.98% loss: 6.26 time: 10.76
-04-17 17:18   74% acc: 5.86% loss: 6.28 time: 11.55
-04-17 17:18   77% acc: 5.75% loss: 6.27 time: 12.37
-04-17 17:18   81% acc: 5.65% loss: 6.27 time: 13.25
-04-17 17:18   84% acc: 5.56% loss: 6.27 time: 14.19
-04-17 17:18   87% acc: 5.36% loss: 6.28 time: 15.21
-04-17 17:18   90% acc: 5.39% loss: 6.25 time: 16.31
-04-17 17:18   94% acc: 5.21% loss: 6.28 time: 17.49
-04-17 17:18   97% acc: 5.04% loss: 6.27 time: 18.92
-04-17 17:18 Epoch: 2 Train acc: 5.04%
-04-17 17:18 Epoch: 2 Valid acc: 6.25%
-04-17 17:18   0% acc: 3.12% loss: 6.28 time: 0.18
-04-17 17:18   3% acc: 10.94% loss: 6.25 time: 0.41
-04-17 17:18   6% acc: 10.42% loss: 6.24 time: 0.66
-04-17 17:18   10% acc: 8.59% loss: 6.25 time: 0.94
-04-17 17:18   13% acc: 8.75% loss: 6.26 time: 1.23
-04-17 17:18   16% acc: 7.81% loss: 6.28 time: 1.55
-04-17 17:18   19% acc: 7.59% loss: 6.29 time: 1.89
-04-17 17:18   23% acc: 7.81% loss: 6.25 time: 2.25
-04-17 17:18   26% acc: 7.29% loss: 6.25 time: 2.64
-04-17 17:18   29% acc: 7.81% loss: 6.25 time: 3.04
-04-17 17:18   32% acc: 7.39% loss: 6.27 time: 3.47
-04-17 17:18   35% acc: 6.77% loss: 6.26 time: 3.91
-04-17 17:18   39% acc: 6.73% loss: 6.27 time: 4.38
-04-17 17:18   42% acc: 6.47% loss: 6.27 time: 4.89
-04-17 17:18   45% acc: 6.04% loss: 6.28 time: 5.43
-04-17 17:18   48% acc: 6.05% loss: 6.28 time: 6.00
-04-17 17:18   52% acc: 5.70% loss: 6.26 time: 6.58
-04-17 17:18   55% acc: 5.90% loss: 6.25 time: 7.20
-04-17 17:18   58% acc: 5.59% loss: 6.26 time: 7.86
-04-17 17:18   61% acc: 5.47% loss: 6.28 time: 8.52
-04-17 17:18   65% acc: 5.36% loss: 6.25 time: 9.22
-04-17 17:18   68% acc: 5.11% loss: 6.25 time: 9.96
-04-17 17:18   71% acc: 5.16% loss: 6.25 time: 10.72
-04-17 17:18   74% acc: 4.95% loss: 6.27 time: 11.52
-04-17 17:19   77% acc: 5.00% loss: 6.27 time: 12.34
-04-17 17:19   81% acc: 4.93% loss: 6.27 time: 13.22
-04-17 17:19   84% acc: 4.75% loss: 6.29 time: 14.17
-04-17 17:19   87% acc: 4.69% loss: 6.27 time: 15.18
-04-17 17:19   90% acc: 4.63% loss: 6.24 time: 16.28
-04-17 17:19   94% acc: 4.58% loss: 6.26 time: 17.46
-04-17 17:19   97% acc: 4.64% loss: 6.23 time: 18.89
-04-17 17:19 Epoch: 3 Train acc: 4.64%
-04-17 17:19 Epoch: 3 Valid acc: 6.25%
-04-17 17:19   0% acc: 21.88% loss: 6.25 time: 0.18
-04-17 17:19   3% acc: 17.19% loss: 6.27 time: 0.40
-04-17 17:19   6% acc: 15.62% loss: 6.25 time: 0.66
-04-17 17:19   10% acc: 14.06% loss: 6.25 time: 0.93
-04-17 17:19   13% acc: 12.50% loss: 6.27 time: 1.24
-04-17 17:19   16% acc: 10.94% loss: 6.26 time: 1.55
-04-17 17:19   19% acc: 9.82% loss: 6.28 time: 1.89
-04-17 17:19   23% acc: 8.59% loss: 6.28 time: 2.25
-04-17 17:19   26% acc: 8.33% loss: 6.27 time: 2.63
-04-17 17:19   29% acc: 8.12% loss: 6.26 time: 3.05
-04-17 17:19   32% acc: 7.39% loss: 6.27 time: 3.48
-04-17 17:19   35% acc: 7.03% loss: 6.27 time: 3.92
-04-17 17:19   39% acc: 6.73% loss: 6.28 time: 4.38
-04-17 17:19   42% acc: 6.47% loss: 6.28 time: 4.89
-04-17 17:19   45% acc: 6.04% loss: 6.27 time: 5.43
-04-17 17:19   48% acc: 5.66% loss: 6.27 time: 5.99
-04-17 17:19   52% acc: 5.70% loss: 6.26 time: 6.59
-04-17 17:19   55% acc: 5.56% loss: 6.26 time: 7.21
-04-17 17:19   58% acc: 5.26% loss: 6.26 time: 7.86
-04-17 17:19   61% acc: 5.16% loss: 6.28 time: 8.54
-04-17 17:19   65% acc: 5.21% loss: 6.26 time: 9.24
-04-17 17:19   68% acc: 4.97% loss: 6.26 time: 9.97
-04-17 17:19   71% acc: 4.89% loss: 6.26 time: 10.73
-04-17 17:19   74% acc: 4.95% loss: 6.25 time: 11.52
-04-17 17:19   77% acc: 4.88% loss: 6.26 time: 12.35
-04-17 17:19   81% acc: 4.69% loss: 6.27 time: 13.23
-04-17 17:19   84% acc: 4.63% loss: 6.29 time: 14.16
-04-17 17:19   87% acc: 4.58% loss: 6.26 time: 15.17
-04-17 17:19   90% acc: 4.42% loss: 6.27 time: 16.26
-04-17 17:19   94% acc: 4.48% loss: 6.25 time: 17.45
-04-17 17:19   97% acc: 4.54% loss: 6.25 time: 18.86
-04-17 17:19 Epoch: 4 Train acc: 4.54%
-04-17 17:19 Epoch: 4 Valid acc: 6.25%
-04-17 17:19   0% acc: 12.50% loss: 6.25 time: 0.18
-04-17 17:19   3% acc: 9.38% loss: 6.24 time: 0.40
-04-17 17:19   6% acc: 7.29% loss: 6.25 time: 0.65
-04-17 17:19   10% acc: 7.81% loss: 6.26 time: 0.93
-04-17 17:19   13% acc: 6.88% loss: 6.29 time: 1.22
-04-17 17:19   16% acc: 6.25% loss: 6.26 time: 1.54
-04-17 17:19   19% acc: 5.36% loss: 6.27 time: 1.88
-04-17 17:19   23% acc: 5.47% loss: 6.27 time: 2.24
-04-17 17:19   26% acc: 5.56% loss: 6.26 time: 2.62
-04-17 17:19   29% acc: 5.94% loss: 6.25 time: 3.03
-04-17 17:19   32% acc: 5.68% loss: 6.27 time: 3.46
-04-17 17:19   35% acc: 5.47% loss: 6.26 time: 3.90
-04-17 17:19   39% acc: 5.05% loss: 6.28 time: 4.38
-04-17 17:19   42% acc: 5.36% loss: 6.27 time: 4.89
-04-17 17:19   45% acc: 5.42% loss: 6.27 time: 5.43
-04-17 17:19   48% acc: 5.47% loss: 6.26 time: 6.00
-04-17 17:19   52% acc: 5.15% loss: 6.28 time: 6.58
-04-17 17:19   55% acc: 5.21% loss: 6.25 time: 7.19
-04-17 17:19   58% acc: 4.93% loss: 6.25 time: 7.84
-04-17 17:19   61% acc: 5.47% loss: 6.26 time: 8.51
-04-17 17:19   65% acc: 5.65% loss: 6.25 time: 9.21
-04-17 17:19   68% acc: 5.97% loss: 6.24 time: 9.93
-04-17 17:19   71% acc: 5.71% loss: 6.27 time: 10.70
-04-17 17:19   74% acc: 5.47% loss: 6.25 time: 11.49
-04-17 17:19   77% acc: 5.50% loss: 6.26 time: 12.32
-04-17 17:19   81% acc: 5.53% loss: 6.26 time: 13.19
-04-17 17:19   84% acc: 5.32% loss: 6.28 time: 14.14
-04-17 17:19   87% acc: 5.13% loss: 6.27 time: 15.15
-04-17 17:19   90% acc: 4.96% loss: 6.24 time: 16.25
-04-17 17:19   94% acc: 4.79% loss: 6.27 time: 17.45
-04-17 17:19   97% acc: 4.64% loss: 6.26 time: 18.89
-04-17 17:19 Epoch: 5 Train acc: 4.64%
-04-17 17:19 Epoch: 5 Valid acc: 6.25%
+WARNING:tensorflow:Standard services need a 'logdir' passed to the SessionManager
+04-18 16:31 Standard services need a 'logdir' passed to the SessionManager
+04-18 16:31   0% acc: 3.12% loss: 6.29 time: 1.22
+04-18 16:31   3% acc: 10.94% loss: 5.66 time: 2.24
+04-18 16:31   6% acc: 11.46% loss: 4.50 time: 3.43
+04-18 16:31   10% acc: 10.94% loss: 4.55 time: 4.65
+04-18 16:31   13% acc: 11.25% loss: 3.48 time: 6.03
+04-18 16:31   16% acc: 10.42% loss: 4.08 time: 7.60
+04-18 16:31   19% acc: 12.05% loss: 3.34 time: 9.01
+04-18 16:31   23% acc: 12.50% loss: 3.35 time: 10.71
+04-18 16:31   26% acc: 12.85% loss: 4.06 time: 12.64
+04-18 16:31   29% acc: 13.75% loss: 3.73 time: 14.27
+04-18 16:31   32% acc: 13.92% loss: 3.77 time: 16.25
+04-18 16:31   35% acc: 13.54% loss: 3.45 time: 18.46
+04-18 16:31   39% acc: 12.98% loss: 2.88 time: 20.57
+04-18 16:31   42% acc: 13.84% loss: 3.40 time: 23.09
+04-18 16:31   45% acc: 13.54% loss: 3.56 time: 25.74
+04-18 16:31   48% acc: 13.67% loss: 3.24 time: 28.53
+04-18 16:31   52% acc: 13.42% loss: 3.94 time: 31.48
+04-18 16:31   55% acc: 13.72% loss: 3.61 time: 34.51
+04-18 16:32   58% acc: 13.98% loss: 3.16 time: 37.85
+04-18 16:32   61% acc: 14.37% loss: 3.19 time: 41.23
+04-18 16:32   65% acc: 14.29% loss: 3.54 time: 44.75
+04-18 16:32   68% acc: 14.77% loss: 3.08 time: 48.35
+04-18 16:32   71% acc: 14.54% loss: 3.62 time: 52.02
+04-18 16:32   74% acc: 14.71% loss: 3.19 time: 55.88
+04-18 16:32   77% acc: 14.12% loss: 3.65 time: 60.03
+04-18 16:32   81% acc: 14.54% loss: 3.39 time: 64.34
+04-18 16:32   84% acc: 14.12% loss: 4.17 time: 68.95
+04-18 16:32   87% acc: 13.84% loss: 3.93 time: 73.82
+04-18 16:32   90% acc: 13.79% loss: 3.33 time: 79.16
+04-18 16:32   94% acc: 14.06% loss: 3.54 time: 84.43
+04-18 16:32   97% acc: 14.31% loss: 2.99 time: 91.48
+04-18 16:32 Epoch: 1 Train acc: 14.31%
+04-18 16:32 Epoch: 1 Valid acc: 19.79%
+04-18 16:33   0% acc: 28.12% loss: 2.20 time: 0.83
+04-18 16:33   3% acc: 23.44% loss: 2.67 time: 1.96
+04-18 16:33   6% acc: 25.00% loss: 2.12 time: 3.12
+04-18 16:33   10% acc: 22.66% loss: 3.22 time: 4.36
+04-18 16:33   13% acc: 20.00% loss: 2.62 time: 5.62
+04-18 16:33   16% acc: 17.71% loss: 3.10 time: 7.00
+04-18 16:33   19% acc: 18.30% loss: 2.93 time: 8.65
+04-18 16:33   23% acc: 17.97% loss: 3.06 time: 10.40
+04-18 16:33   26% acc: 17.71% loss: 3.58 time: 12.16
+04-18 16:33   29% acc: 18.12% loss: 3.28 time: 14.14
+04-18 16:33   32% acc: 17.33% loss: 3.27 time: 16.23
+04-18 16:33   35% acc: 16.67% loss: 2.91 time: 18.18
+04-18 16:33   39% acc: 15.87% loss: 2.63 time: 20.31
+04-18 16:33   42% acc: 16.52% loss: 3.11 time: 22.91
+04-18 16:33   45% acc: 16.46% loss: 3.06 time: 25.45
+04-18 16:33   48% acc: 16.21% loss: 2.98 time: 28.10
+04-18 16:33   52% acc: 15.81% loss: 3.67 time: 30.99
+04-18 16:33   55% acc: 15.62% loss: 3.28 time: 33.91
+04-18 16:33   58% acc: 15.79% loss: 2.93 time: 37.04
+04-18 16:33   61% acc: 16.09% loss: 2.94 time: 40.21
+04-18 16:33   65% acc: 15.92% loss: 3.36 time: 43.72
+04-18 16:33   68% acc: 16.34% loss: 2.80 time: 47.14
+04-18 16:33   71% acc: 16.03% loss: 3.30 time: 50.69
+04-18 16:33   74% acc: 16.15% loss: 3.04 time: 54.51
+04-18 16:33   77% acc: 15.50% loss: 3.53 time: 58.40
+04-18 16:34   81% acc: 15.87% loss: 3.23 time: 62.30
+04-18 16:34   84% acc: 15.39% loss: 3.93 time: 67.02
+04-18 16:34   87% acc: 15.07% loss: 3.61 time: 71.91
+04-18 16:34   90% acc: 14.98% loss: 3.21 time: 77.08
+04-18 16:34   94% acc: 15.21% loss: 3.37 time: 82.42
+04-18 16:34   97% acc: 15.42% loss: 2.87 time: 89.14
+04-18 16:34 Epoch: 2 Train acc: 15.42%
+04-18 16:34 Epoch: 2 Valid acc: 19.79%
+04-18 16:34   0% acc: 31.25% loss: 2.08 time: 0.86
+04-18 16:34   3% acc: 29.69% loss: 2.55 time: 1.83
+04-18 16:34   6% acc: 30.21% loss: 2.05 time: 3.03
+04-18 16:34   10% acc: 27.34% loss: 3.05 time: 4.18
+04-18 16:34   13% acc: 23.75% loss: 2.49 time: 5.58
+04-18 16:34   16% acc: 20.83% loss: 2.94 time: 7.11
+04-18 16:34   19% acc: 20.98% loss: 2.74 time: 8.80
+04-18 16:34   23% acc: 20.31% loss: 2.86 time: 10.51
+04-18 16:34   26% acc: 19.79% loss: 3.42 time: 12.37
+04-18 16:34   29% acc: 20.00% loss: 3.15 time: 14.22
+04-18 16:34   32% acc: 19.03% loss: 3.07 time: 16.41
+04-18 16:34   35% acc: 18.23% loss: 2.82 time: 18.63
+04-18 16:34   39% acc: 17.31% loss: 2.57 time: 20.94
+04-18 16:34   42% acc: 17.86% loss: 2.99 time: 23.49
+04-18 16:34   45% acc: 17.71% loss: 2.98 time: 26.01
+04-18 16:35   48% acc: 17.58% loss: 2.87 time: 28.73
+04-18 16:35   52% acc: 17.10% loss: 3.51 time: 31.54
+04-18 16:35   55% acc: 17.01% loss: 3.19 time: 34.49
+04-18 16:35   58% acc: 17.11% loss: 2.81 time: 37.51
+04-18 16:35   61% acc: 17.34% loss: 2.94 time: 40.91
+04-18 16:35   65% acc: 17.11% loss: 3.31 time: 44.28
+04-18 16:35   68% acc: 17.47% loss: 2.76 time: 47.75
+04-18 16:35   71% acc: 16.98% loss: 3.19 time: 51.44
+04-18 16:35   74% acc: 17.19% loss: 2.97 time: 55.23
+04-18 16:35   77% acc: 16.75% loss: 3.47 time: 59.17
+04-18 16:35   81% acc: 17.07% loss: 3.17 time: 63.29
+04-18 16:35   84% acc: 16.55% loss: 3.78 time: 67.87
+04-18 16:35   87% acc: 16.18% loss: 3.47 time: 72.76
+04-18 16:35   90% acc: 16.06% loss: 3.10 time: 78.06
+04-18 16:35   94% acc: 16.25% loss: 3.28 time: 83.50
+04-18 16:36   97% acc: 16.43% loss: 2.82 time: 90.33
+04-18 16:36 Epoch: 3 Train acc: 16.43%
+04-18 16:36 Epoch: 3 Valid acc: 19.79%
+04-18 16:36   0% acc: 34.38% loss: 2.01 time: 0.82
+04-18 16:36   3% acc: 31.25% loss: 2.46 time: 1.93
+04-18 16:36   6% acc: 32.29% loss: 2.00 time: 3.15
+04-18 16:36   10% acc: 28.91% loss: 3.00 time: 4.54
+04-18 16:36   13% acc: 25.00% loss: 2.41 time: 6.03
+04-18 16:36   16% acc: 22.40% loss: 2.88 time: 7.61
+04-18 16:36   19% acc: 22.32% loss: 2.66 time: 9.31
+04-18 16:36   23% acc: 21.48% loss: 2.75 time: 11.13
+04-18 16:36   26% acc: 20.83% loss: 3.21 time: 13.07
+04-18 16:36   29% acc: 21.25% loss: 3.00 time: 15.13
+04-18 16:36   32% acc: 20.17% loss: 2.93 time: 17.06
+04-18 16:36   35% acc: 19.79% loss: 2.80 time: 19.14
+04-18 16:36   39% acc: 18.75% loss: 2.62 time: 21.47
+04-18 16:36   42% acc: 19.20% loss: 2.93 time: 23.99
+04-18 16:36   45% acc: 19.17% loss: 2.94 time: 26.61
+04-18 16:36   48% acc: 19.53% loss: 2.82 time: 29.47
+04-18 16:36   52% acc: 18.93% loss: 3.47 time: 32.38
+04-18 16:36   55% acc: 19.10% loss: 3.10 time: 35.41
+04-18 16:36   58% acc: 19.08% loss: 2.76 time: 38.60
+04-18 16:36   61% acc: 19.22% loss: 2.91 time: 41.86
+04-18 16:36   65% acc: 18.90% loss: 3.23 time: 45.12
+04-18 16:36   68% acc: 19.18% loss: 2.73 time: 48.69
+04-18 16:37   71% acc: 18.61% loss: 3.18 time: 52.44
+04-18 16:37   74% acc: 18.36% loss: 2.95 time: 56.29
+04-18 16:37   77% acc: 17.62% loss: 3.43 time: 60.27
+04-18 16:37   81% acc: 17.91% loss: 3.08 time: 64.51
+04-18 16:37   84% acc: 17.25% loss: 3.69 time: 69.02
+04-18 16:37   87% acc: 16.85% loss: 3.39 time: 73.96
+04-18 16:37   90% acc: 16.70% loss: 3.02 time: 79.14
+04-18 16:37   94% acc: 16.88% loss: 3.22 time: 84.83
+04-18 16:37   97% acc: 17.04% loss: 2.80 time: 91.63
+04-18 16:37 Epoch: 4 Train acc: 17.04%
+04-18 16:37 Epoch: 4 Valid acc: 20.83%
+04-18 16:37   0% acc: 31.25% loss: 1.95 time: 0.87
+04-18 16:37   3% acc: 28.12% loss: 2.38 time: 1.90
+04-18 16:37   6% acc: 32.29% loss: 1.94 time: 3.13
+04-18 16:37   10% acc: 30.47% loss: 2.93 time: 4.53
+04-18 16:37   13% acc: 26.88% loss: 2.37 time: 5.94
+04-18 16:37   16% acc: 23.44% loss: 2.86 time: 7.45
+04-18 16:37   19% acc: 23.21% loss: 2.64 time: 9.02
+04-18 16:37   23% acc: 22.27% loss: 2.76 time: 10.85
+04-18 16:37   26% acc: 21.53% loss: 3.17 time: 12.74
+04-18 16:37   29% acc: 21.88% loss: 2.93 time: 14.69
+04-18 16:38   32% acc: 20.74% loss: 2.84 time: 16.68
+04-18 16:38   35% acc: 20.05% loss: 2.79 time: 18.76
+04-18 16:38   39% acc: 19.71% loss: 2.70 time: 21.07
+04-18 16:38   42% acc: 19.87% loss: 2.91 time: 23.58
+04-18 16:38   45% acc: 19.58% loss: 2.98 time: 26.20
+04-18 16:38   48% acc: 19.92% loss: 2.83 time: 28.98
+04-18 16:38   52% acc: 19.12% loss: 3.45 time: 31.78
+04-18 16:38   55% acc: 18.92% loss: 3.11 time: 34.82
+04-18 16:38   58% acc: 18.91% loss: 2.75 time: 38.09
+04-18 16:38   61% acc: 19.22% loss: 2.90 time: 41.42
+04-18 16:38   65% acc: 18.90% loss: 3.22 time: 44.95
+04-18 16:38   68% acc: 19.18% loss: 2.75 time: 48.35
+04-18 16:38   71% acc: 18.75% loss: 3.16 time: 50.51
+04-18 16:38   74% acc: 18.75% loss: 2.94 time: 52.54
+04-18 16:38   77% acc: 18.12% loss: 3.40 time: 54.65
+04-18 16:38   81% acc: 18.39% loss: 3.07 time: 56.89
+04-18 16:38   84% acc: 17.94% loss: 3.64 time: 59.28
+04-18 16:38   87% acc: 17.52% loss: 3.33 time: 61.85
+04-18 16:38   90% acc: 17.46% loss: 3.02 time: 64.63
+04-18 16:38   94% acc: 17.60% loss: 3.17 time: 67.68
+04-18 16:38   97% acc: 17.74% loss: 2.80 time: 71.37
+04-18 16:38 Epoch: 5 Train acc: 17.74%
+04-18 16:38 Epoch: 5 Valid acc: 20.83%
+
+04-18 17:18 Epoch: 5 Train acc: 16.13%
+04-18 17:18 Epoch: 5 Valid acc: 19.79%
 
 
 

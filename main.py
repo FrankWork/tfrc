@@ -46,8 +46,8 @@ class Model(object):
     (self.doc, self.doc_len, self.ques, self.ques_len, self.label, self.ans) = \
                                   (doc, doc_len, ques, ques_len, label, ans)
     # with tf.namespace('embedding_lookup'):
-    embeddings = tf.Variable(embeddings, dtype=tf.float32, name='embeddings')
-    # embeddings = tf.get_variable(initializer=embeddings, dtype=tf.float32, name='embeddings')
+    # embeddings = tf.Variable(embeddings, dtype=tf.float32, name='embeddings')
+    embeddings = tf.get_variable(initializer=embeddings, dtype=tf.float32, name='embeddings')
     doc_emb = tf.nn.embedding_lookup(embeddings, doc)
     ques_emb = tf.nn.embedding_lookup(embeddings, ques)
 
@@ -66,7 +66,8 @@ class Model(object):
     self.d = d
 
     # bilinear attention
-    ws = tf.Variable(tf.random_uniform([hz, hz], minval=-0.01, maxval=0.01), name='ws')
+    ws = tf.get_variable(shape=[hz, hz], dtype=tf.float32, name='ws',
+            initializer=tf.random_uniform_initializer(minval=-0.01, maxval=0.01))
     alpha = tf.matmul(q, ws) # (bz, hz)
     alpha = tf.matmul(d, tf.reshape(alpha,[bz, hz, 1]))
     alpha = tf.reshape(alpha, [bz, -1]) # (bz, len)
@@ -75,7 +76,8 @@ class Model(object):
     attention = tf.reduce_sum(attention, 1)# (bz, hz)
 
     # prediction 
-    w = tf.Variable(tf.random_uniform([hz, nl], minval=-0.01, maxval=0.01), name='w') # [hz, nl]    
+    w = tf.get_variable(shape=[hz, nl], dtype=tf.float32, name='w',
+            initializer=tf.random_uniform_initializer(minval=-0.01, maxval=0.01))
     logits = tf.matmul(attention, w) #[bz, nl] logits is unnormalized probabilities
 
     logits = logits * label # [bz, nl] [nl]
@@ -105,6 +107,8 @@ class Model(object):
     self.train_op = train_op
     self.loss = loss
     self.global_step = global_step
+    self.fetch = tvars
+    
 
 def run_epoch(session, model, all_data, is_training=True, verbose=True):
   start_time = time.time()
@@ -112,26 +116,25 @@ def run_epoch(session, model, all_data, is_training=True, verbose=True):
   acc_count = 0
   total_steps = len(all_data)
 
+  try:
+    gstep = session.run(model.global_step)
+    logging.info('global_step: %d' % gstep)
+    # for v in model.fetch:
+    #   logging.info(v.op.name)
+  except AttributeError:
+    #'Valid Model' instance has no attribute 'global_step'
+    pass
+
   # np.random.shuffle(all_data)
   for step, minibatch in enumerate(all_data):
     (doc, doc_len, ques, ques_len, labled, ans) = minibatch
-
-    # print(doc_len)
-    # exit()
-
-
     feed_dict = {
       model.doc:doc, model.doc_len:doc_len, model.ques:ques,
       model.ques_len: ques_len, model.label: labled, model.ans: ans
     }
     
     if is_training:
-      # d = session.run([model.d], feed_dict=feed_dict)
-      # print('='*40)
-      # print(d)
-      # print('='*40)
-      # exit()
-      acc, loss = session.run([model.acc, model.loss], feed_dict=feed_dict)
+      _, acc, loss = session.run([model.train_op, model.acc, model.loss], feed_dict=feed_dict)
       acc_count += acc
       if verbose:
         logging.info("  %.0f%% acc: %.2f%% loss: %.2f time: %.2f" %(
@@ -143,7 +146,7 @@ def run_epoch(session, model, all_data, is_training=True, verbose=True):
     else:
       acc, = session.run([model.acc], feed_dict=feed_dict)
       acc_count += acc
-    
+
   return acc_count / (total_steps * config.batch_size)
     
 
@@ -243,8 +246,8 @@ def main(_):
         m_valid = Model(embeddings, is_training=False)
       # tf.summary.scalar("Valid_acc", m_valid.acc)
     
-    sv = tf.train.Supervisor(logdir=config.save_path, summary_op=None, 
-                                save_model_secs=0, global_step=m_train.global_step)
+    sv = tf.train.Supervisor(summary_op=None, logdir=config.save_path, 
+                                global_step=m_train.global_step)
     with sv.managed_session() as session:
 
       if config.test_only:
